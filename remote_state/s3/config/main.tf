@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "remote_state_config" {
 
         resources = [
             "arn:aws:s3:::${var.tf_state_bucket}${var.tf_state_path}",
-            "arn:aws:s3:::${var.tf_state_bucket}${var.tf_state_path}/*",
+            "arn:aws:s3:::${var.tf_state_bucket}${var.tf_state_path}*",
         ]
     }
 

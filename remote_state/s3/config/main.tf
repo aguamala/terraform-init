@@ -2,6 +2,9 @@
 # S3 terraform state policy
 #--------------------------------------------------------------
 data "aws_iam_policy_document" "remote_state_config" {
+
+    tf_state_path = "${var.tf_state_name == "root" ? "" :  replace(var.tf_state_name, "_", "/")}"
+
     statement {
         sid = "1"
         actions = [
@@ -20,8 +23,8 @@ data "aws_iam_policy_document" "remote_state_config" {
         ]
 
         resources = [
-            "arn:aws:s3:::${var.tf_state_bucket}${var.tf_state_path}",
-            "arn:aws:s3:::${var.tf_state_bucket}${var.tf_state_path}*",
+            "arn:aws:s3:::${var.tf_state_bucket}/${var.tf_state_path}",
+            "arn:aws:s3:::${var.tf_state_bucket}/${var.tf_state_path}/*",
         ]
     }
 
@@ -34,6 +37,8 @@ resource "aws_iam_policy" "remote_state_config" {
 }
 
 data "aws_iam_policy_document" "readonly_remote_state_config" {
+
+    tf_state_path = "${var.tf_state_name == "root" ? "" :  replace(var.tf_state_name, "_", "/")}"
     statement {
         sid = "1"
         actions = [
@@ -51,8 +56,8 @@ data "aws_iam_policy_document" "readonly_remote_state_config" {
         ]
 
         resources = [
-            "arn:aws:s3:::${var.tf_state_bucket}${var.tf_state_path}",
-            "arn:aws:s3:::${var.tf_state_bucket}${var.tf_state_path}/*",
+            "arn:aws:s3:::${var.tf_state_bucket}/${var.tf_state_path}",
+            "arn:aws:s3:::${var.tf_state_bucket}/${var.tf_state_path}/*",
         ]
     }
 
@@ -68,12 +73,16 @@ resource "aws_iam_policy" "readonly_remote_state_config" {
 # S3 remote state script
 #--------------------------------------------------------------
 resource "null_resource" "remote_state_config" {
+    tf_state_path = "${var.tf_state_name == "root" ? "" :  replace(var.tf_state_name, "_", "/")}"
+
     provisioner "local-exec" {
-        command = "echo \"${data.template_file.remote_state_config.rendered}\" > ./${var.tf_state_path}remote-state-config.sh"
+        command = "echo \"${data.template_file.remote_state_config.rendered}\" > .${var.tf_state_path}/remote-state-config.sh"
     }
 }
 
 data "template_file" "remote_state_config" {
+
+    tf_state_path = "${var.tf_state_name == "root" ? "" :  replace(var.tf_state_name, "_", "/")}"
     template = "${file("${path.module}/templates/remote_state_config_sh.tpl")}"
 
     vars {
@@ -92,6 +101,8 @@ resource "null_resource" "create_data_state_file" {
 }
 
 data "template_file" "data_state_file" {
+
+    tf_state_path = "${var.tf_state_name == "root" ? "" :  replace(var.tf_state_name, "_", "/")}"
     template = "${file("${path.module}/templates/data_tfstate_files.tpl")}"
 
     vars {
@@ -107,22 +118,25 @@ data "template_file" "data_state_file" {
 # Create terraform.tfvars
 #--------------------------------------------------------------
 resource "null_resource" "terraform_tfvars" {
+    tf_state_path = "${var.tf_state_name == "root" ? "" :  replace(var.tf_state_name, "_", "/")}"
     provisioner "local-exec" {
         command = "sh ${path.module}/scripts/init.sh ${var.tf_state_path}"
     }
 
     provisioner "local-exec" {
-        command = "echo \"${data.template_file.terraform_tfvars.rendered}\" > ./${var.tf_state_path}terraform.tfvars"
+        command = "echo \"${data.template_file.terraform_tfvars.rendered}\" > .${var.tf_state_path}/terraform.tfvars"
     }
 }
 
 resource "null_resource" "providers_variables" {
+
+    tf_state_path = "${var.tf_state_name == "root" ? "" :  replace(var.tf_state_name, "_", "/")}"
     provisioner "local-exec" {
-        command = "if [ ! -f ./${var.tf_state_path}variables.tf ]; then cp -p ${path.module}/files/variables.tf ./${var.tf_state_path}variables.tf; fi"
+        command = "if [ ! -f .${var.tf_state_path}/variables.tf ]; then cp -p ${path.module}/files/variables.tf .${var.tf_state_path}/variables.tf; fi"
     }
 
     provisioner "local-exec" {
-        command = "if [ ! -f ./${var.tf_state_path}provider.tf ]; then cp -p ${path.module}/files/provider.tf ./${var.tf_state_path}provider.tf; fi"
+        command = "if [ ! -f .${var.tf_state_path}/provider.tf ]; then cp -p ${path.module}/files/provider.tf .${var.tf_state_path}/provider.tf; fi"
     }
 
     depends_on = ["null_resource.terraform_tfvars"]

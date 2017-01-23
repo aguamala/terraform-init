@@ -18,11 +18,6 @@ variable "tf_state_name" {
     description = "terraform state file key"
 }
 
-variable "tf_state_path" {
-    default = ""
-    description = "terraform state file S3 key"
-}
-
 variable "tf_state_readonlyaccess_users" {
     type = "list"
     default = []

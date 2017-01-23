@@ -2,7 +2,7 @@
 # config database rds remote state
 #--------------------------------------------------------------
 
-module "production_database_rds_remote_state_config" {
+module "database_rds_remote_state_config" {
     source = "github.com/aguamala/terraform-init/remote_state/s3//config"
 
     #remote state backend-config
@@ -12,7 +12,6 @@ module "production_database_rds_remote_state_config" {
     tf_state_aws_profile = "${var.aws_terraform_profile}"
     tf_state_bucket = "${module.remote_state_bucket.id}"
 
-    tf_state_name = "production_database_rds"
-    tf_state_path = "/production/database-rds/"
+    tf_state_name = "database_rds"
 
 }

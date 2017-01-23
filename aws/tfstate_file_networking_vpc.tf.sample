@@ -13,6 +13,5 @@ module "networking_vpc_remote_state_config" {
     tf_state_bucket = "${module.remote_state_bucket.id}"
 
     tf_state_name = "networking_vpc"
-    tf_state_path = "/networking-vpc/"
 
 }

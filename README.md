@@ -49,3 +49,11 @@ sh remote-state-config.sh
 ```
 
 The purpose of the root tf state file is to control global AWS global services like IAM.
+
+
+## Create separated tf state file
+
+```
+mv tfstate_file_networking_vpc.tf.sample tfstate_file_networking_vpc.tf
+
+```

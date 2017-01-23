@@ -3,7 +3,7 @@
 #--------------------------------------------------------------
 
 module "remote_state_bucket" {
-    source = "github.com/aguamala/terraform-modules/remote_state/s3//bucket"
+    source = "github.com/aguamala/terraform-init/remote_state/s3//bucket"
     aws_user_bucket_creator = "${var.aws_user_bucket_creator}"
 }
 
@@ -12,7 +12,7 @@ variable "aws_user_bucket_creator" {
 }
 
 module "root_remote_state_config" {
-    source = "github.com/aguamala/terraform-modules/remote_state/s3//config"
+    source = "github.com/aguamala/terraform-init/remote_state/s3//config"
 
     #tfstate access
     tf_state_fullaccess_users = ["${var.aws_user_bucket_creator}"]

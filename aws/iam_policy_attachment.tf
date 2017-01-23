@@ -3,7 +3,7 @@
 #--------------------------------------------------------------
 resource "aws_iam_policy_attachment" "identity_iam_fullaccess" {
     name = "iamfullaccess"
-    users = ["${var.aws_user_bucket_creator}"] #aws_terraform_user this will change previous manual granted policy
+    users = ["${var.aws_terraform_profile}"] #aws_terraform_user this will change previous manual granted policy
     #roles = []
     groups = ["${aws_iam_group.identity_iam_fullaccess.name}"]
     policy_arn = "arn:aws:iam::aws:policy/IAMFullAccess"

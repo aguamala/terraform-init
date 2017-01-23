@@ -1,5 +1,5 @@
 #--------------------------------------------------------------
-# Init remote state
+# config root remote state
 #--------------------------------------------------------------
 
 variable "terraform_state_bucket" {

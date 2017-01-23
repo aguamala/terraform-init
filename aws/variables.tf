@@ -1,4 +1,8 @@
 
 
-variable "aws_terraform_profile" {}
-variable "aws_terraform_region" {}
+variable "aws_terraform_profile" {
+    description = "Terraform AWS profile"
+}
+variable "aws_terraform_region" {
+    description = "AWS default region"
+}

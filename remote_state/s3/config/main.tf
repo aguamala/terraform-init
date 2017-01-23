@@ -69,7 +69,7 @@ resource "aws_iam_policy" "readonly_remote_state_config" {
 #--------------------------------------------------------------
 resource "null_resource" "remote_state_config" {
     provisioner "local-exec" {
-        command = "echo \"${data.template_file.remote_state_config.rendered}\" > ./${var.tf_state_path}${var.tf_state_name}-remote-state-config.sh"
+        command = "echo \"${data.template_file.remote_state_config.rendered}\" > ./${var.tf_state_path}remote-state-config.sh"
     }
 }
 

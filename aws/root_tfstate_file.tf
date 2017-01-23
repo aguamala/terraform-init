@@ -8,7 +8,6 @@ module "remote_state_bucket" {
 }
 
 variable "aws_user_bucket_creator" {
-    default = "terraform.root"
 }
 
 module "root_remote_state_config" {

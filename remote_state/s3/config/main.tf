@@ -132,7 +132,9 @@ data "template_file" "terraform_tfvars" {
     template = "${file("${path.module}/templates/terraform_tfvars.tpl")}"
 
     vars {
-        terraform_tfvars_region = "${var.tf_state_aws_region}"
-        terraform_tfvars_profile = "${var.tf_state_aws_profile}"
+        terraform_tfvars_region   = "${var.tf_state_aws_region}"
+        terraform_tfvars_profile  = "${var.tf_state_aws_profile}"
+        terraform_tfvars_state_bucket = "${var.tf_state_bucket}"
+
     }
 }

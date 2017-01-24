@@ -71,7 +71,7 @@ resource "aws_iam_policy" "readonly_remote_state_config" {
 #--------------------------------------------------------------
 resource "null_resource" "remote_state_config" {
     provisioner "local-exec" {
-        command = "echo \"${data.template_file.remote_state_config.rendered}\" > .${var.tf_state_path}/remote-state-config.sh"
+        command = "echo \"${data.template_file.remote_state_config.rendered}\" > ${var.tf_state_path}remote-state-config.sh"
     }
 }
 
@@ -116,18 +116,18 @@ resource "null_resource" "terraform_tfvars" {
     }
 
     provisioner "local-exec" {
-        command = "echo \"${data.template_file.terraform_tfvars.rendered}\" > .${var.tf_state_path}terraform.tfvars"
+        command = "echo \"${data.template_file.terraform_tfvars.rendered}\" > ${var.tf_state_path}terraform.tfvars"
     }
 }
 
 resource "null_resource" "providers_variables" {
 
     provisioner "local-exec" {
-        command = "if [ ! -f .${var.tf_state_path}variables.tf ]; then cp -p ${path.module}/files/variables.tf .${var.tf_state_path}variables.tf; fi"
+        command = "if [ ! -f .${var.tf_state_path}variables.tf ]; then cp -p ${path.module}/files/variables.tf ${var.tf_state_path}variables.tf; fi"
     }
 
     provisioner "local-exec" {
-        command = "if [ ! -f .${var.tf_state_path}provider.tf ]; then cp -p ${path.module}/files/provider.tf .${var.tf_state_path}provider.tf; fi"
+        command = "if [ ! -f .${var.tf_state_path}provider.tf ]; then cp -p ${path.module}/files/provider.tf ${var.tf_state_path}provider.tf; fi"
     }
 
     depends_on = ["null_resource.terraform_tfvars"]

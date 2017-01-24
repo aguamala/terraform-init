@@ -1,0 +1,105 @@
+#--------------------------------------------------------------
+# Billing group membership
+#--------------------------------------------------------------
+
+resource "aws_iam_group_membership" "billing_fullaccess" {
+    name = "billing-group-membership"
+    users = []
+    group = "${aws_iam_group.billing_fullaccess.name}"
+}
+
+#--------------------------------------------------------------
+# Identity group membership
+#--------------------------------------------------------------
+
+resource "aws_iam_group_membership" "identity_iam_readonly" {
+    name = "identity-iam-group-membership"
+    users = []
+    group = "${aws_iam_group.identity_iam_readonlyaccess.name}"
+}
+
+resource "aws_iam_group_membership" "identity_iam_fullaccess" {
+    name = "identity-iam-group-membership"
+    users = []
+    group = "${aws_iam_group.identity_iam_fullaccess.name}"
+}
+
+
+
+#--------------------------------------------------------------
+# Storage group membership
+#--------------------------------------------------------------
+
+resource "aws_iam_group_membership" "storage_s3_readonly" {
+    name = "storage-s3-group-membership"
+    users = []
+    group = "${aws_iam_group.storage_s3_readonlyaccess.name}"
+}
+
+resource "aws_iam_group_membership" "storage_s3_fullaccess" {
+    name = "storage-s3-group-membership"
+    users = []
+    group = "${aws_iam_group.storage_s3_fullaccess.name}"
+}
+
+
+#--------------------------------------------------------------
+# Networking group membership
+#--------------------------------------------------------------
+
+resource "aws_iam_group_membership" "networking_vpc_readonly" {
+    name = "networking-vpc-group-membership"
+    users = []
+    group = "${aws_iam_group.networking_vpc_readonlyaccess.name}"
+}
+
+resource "aws_iam_group_membership" "networking_vpc_fullaccess" {
+    name = "networking-vpc-group-membership"
+    users = []
+    group = "${aws_iam_group.networking_vpc_fullaccess.name}"
+}
+
+
+resource "aws_iam_group_membership" "networking_route53_readonly" {
+    name = "networking-route53-group-membership"
+    users = []
+    group = "${aws_iam_group.networking_route53_readonlyaccess.name}"
+}
+
+resource "aws_iam_group_membership" "networking_route53_fullaccess" {
+    name = "networking-route53-group-membership"
+    users = []
+    group = "${aws_iam_group.networking_route53_fullaccess.name}"
+}
+
+#--------------------------------------------------------------
+# Database group membership
+#--------------------------------------------------------------
+
+resource "aws_iam_group_membership" "database_rds_readonly" {
+    name = "database-rds-group-membership"
+    users = []
+    group = "${aws_iam_group.database_rds_readonlyaccess.name}"
+}
+
+resource "aws_iam_group_membership" "database_rds_fullaccess" {
+    name = "database-rds-group-membership"
+    users = []
+    group = "${aws_iam_group.database_rds_fullaccess.name}"
+}
+
+#--------------------------------------------------------------
+# Compute group membership
+#--------------------------------------------------------------
+
+resource "aws_iam_group_membership" "compute_ec2_readonly" {
+    name = "compute-ec2-group-membership"
+    users = []
+    group = "${aws_iam_group.compute_ec2_readonlyaccess.name}"
+}
+
+resource "aws_iam_group_membership" "compute_ec2_fullaccess" {
+    name = "compute-ec2-group-membership"
+    users = []
+    group = "${aws_iam_group.compute_ec2_fullaccess.name}"
+}

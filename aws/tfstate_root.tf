@@ -22,6 +22,6 @@ module "root_remote_state_config" {
     #remote state backend-config
     tf_state_aws_profile = "${var.aws_terraform_profile}"
     tf_state_bucket = "${module.remote_state_bucket.id}"
-    tf_state_name = "root"
+    #tf_state_name = "root"
 
 }

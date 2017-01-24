@@ -45,6 +45,9 @@ Enable remote state.
 
 ```
 sh remote-state-config.sh
+Remote state management enabled
+Remote state configured and pulled.
+set remote s3 state to terraform.tfstate
 
 ```
 
@@ -55,5 +58,21 @@ The purpose of the root tf state file is to control global AWS global services l
 
 ```
 mv tfstate_file_networking_vpc.tf.sample tfstate_file_networking_vpc.tf
+
+terraform get
+
+terraform apply
+
+```
+
+Enable remote state for separated tfstate file
+
+```
+cd networking/vpc/
+
+sh remote-state-config.sh
+Remote state management enabled
+Remote state configured and pulled.
+set remote s3 state to terraform.tfstate
 
 ```

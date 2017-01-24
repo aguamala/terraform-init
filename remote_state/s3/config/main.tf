@@ -101,7 +101,7 @@ data "template_file" "data_state_file" {
     vars {
         tf_state_bucket = "${var.tf_state_bucket}"
         tf_state_key = "${var.tf_state_path}terraform.tfstate"
-        tf_state_name =  "${replace(var.tf_state_path, "/", "_")}terraform"
+        tf_state_name =  "${replace(var.tf_state_path, "/", "_")}file"
         tf_state_aws_region = "${var.tf_state_aws_region}"
         tf_state_aws_profile = "${var.tf_state_aws_profile}"
     }

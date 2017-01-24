@@ -73,6 +73,8 @@ resource "null_resource" "remote_state_config" {
     provisioner "local-exec" {
         command = "echo \"${data.template_file.remote_state_config.rendered}\" > ./${var.tf_state_path}remote-state-config.sh"
     }
+    
+    depends_on = ["null_resource.terraform_tfvars"]
 }
 
 data "template_file" "remote_state_config" {

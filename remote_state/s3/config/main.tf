@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "remote_state_config" {
 }
 
 resource "aws_iam_policy" "remote_state_config" {
-    name = "${var.tf_state_name}_fullaccess_remote_state_s3_config"
+    name = "${replace(var.tf_state_path, "/", "_")}_fullaccess_remote_state_s3_config"
     path = "/terraform/s3/"
     policy = "${data.aws_iam_policy_document.remote_state_config.json}"
 }
@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "readonly_remote_state_config" {
 }
 
 resource "aws_iam_policy" "readonly_remote_state_config" {
-    name = "${var.tf_state_name}_readonlyaccess_remote_state_s3_config"
+    name = "${replace(var.tf_state_path, "/", "_")}_readonlyaccess_remote_state_s3_config"
     path = "/readonly/terraform/s3/"
     policy = "${data.aws_iam_policy_document.readonly_remote_state_config.json}"
 }
@@ -100,7 +100,8 @@ data "template_file" "data_state_file" {
 
     vars {
         tf_state_bucket = "${var.tf_state_bucket}"
-        tf_state_key = "${var.tf_state_path}${var.tf_state_name}.tfstate"
+        tf_state_key = "${var.tf_state_path}terraform.tfstate"
+        tf_state_name =  "${replace(var.tf_state_path, "/", "_")}"
         tf_state_aws_region = "${var.tf_state_aws_region}"
         tf_state_aws_profile = "${var.tf_state_aws_profile}"
     }

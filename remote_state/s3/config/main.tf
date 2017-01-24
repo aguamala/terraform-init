@@ -71,7 +71,7 @@ resource "aws_iam_policy" "readonly_remote_state_config" {
 #--------------------------------------------------------------
 resource "null_resource" "remote_state_config" {
     provisioner "local-exec" {
-        command = "echo \"${data.template_file.remote_state_config.rendered}\" > ${var.tf_state_path}remote-state-config.sh"
+        command = "echo \"${data.template_file.remote_state_config.rendered}\" > ./${var.tf_state_path}remote-state-config.sh"
     }
 }
 
@@ -116,7 +116,7 @@ resource "null_resource" "terraform_tfvars" {
     }
 
     provisioner "local-exec" {
-        command = "echo \"${data.template_file.terraform_tfvars.rendered}\" > ${var.tf_state_path}terraform.tfvars"
+        command = "echo \"${data.template_file.terraform_tfvars.rendered}\" > ./${var.tf_state_path}terraform.tfvars"
     }
 }
 

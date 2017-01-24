@@ -12,6 +12,6 @@ module "database_rds_remote_state_config" {
     tf_state_aws_profile = "${var.aws_terraform_profile}"
     tf_state_bucket = "${module.remote_state_bucket.id}"
 
-    tf_state_name = "database/rds/"
+    tf_state_path = "database/rds/"
 
 }

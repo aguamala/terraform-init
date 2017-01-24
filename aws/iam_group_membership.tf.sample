@@ -1,3 +1,9 @@
+#LIMTIS
+#http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html
+#user 10 groups
+#
+#
+
 #--------------------------------------------------------------
 # Billing group membership
 #--------------------------------------------------------------
@@ -37,7 +43,7 @@ resource "aws_iam_group_membership" "storage_s3_readonly" {
     group = "${aws_iam_group.storage_s3_readonlyaccess.name}"
 }
 
-#use with caution 
+#use with caution
 #resource "aws_iam_group_membership" "storage_s3_fullaccess" {
 #    name = "storage-s3-group-membership"
 #    users = []

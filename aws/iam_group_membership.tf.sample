@@ -18,11 +18,12 @@ resource "aws_iam_group_membership" "identity_iam_readonly" {
     group = "${aws_iam_group.identity_iam_readonlyaccess.name}"
 }
 
-resource "aws_iam_group_membership" "identity_iam_fullaccess" {
-    name = "identity-iam-group-membership"
-    users = []
-    group = "${aws_iam_group.identity_iam_fullaccess.name}"
-}
+#use with caution
+#resource "aws_iam_group_membership" "identity_iam_fullaccess" {
+#    name = "identity-iam-group-membership"
+#    users = []
+#    group = "${aws_iam_group.identity_iam_fullaccess.name}"
+#}
 
 
 
@@ -36,11 +37,12 @@ resource "aws_iam_group_membership" "storage_s3_readonly" {
     group = "${aws_iam_group.storage_s3_readonlyaccess.name}"
 }
 
-resource "aws_iam_group_membership" "storage_s3_fullaccess" {
-    name = "storage-s3-group-membership"
-    users = []
-    group = "${aws_iam_group.storage_s3_fullaccess.name}"
-}
+#use with caution 
+#resource "aws_iam_group_membership" "storage_s3_fullaccess" {
+#    name = "storage-s3-group-membership"
+#    users = []
+#    group = "${aws_iam_group.storage_s3_fullaccess.name}"
+#}
 
 
 #--------------------------------------------------------------

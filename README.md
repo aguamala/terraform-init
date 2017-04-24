@@ -41,7 +41,7 @@ var.terraform_state_bucket
   Enter a value: tf-state-files
 ```
 
-Enable remote state.
+Enable remote state. (DEPRECATED)
 
 ```
 sh remote-state-config.sh
@@ -50,6 +50,12 @@ Remote state configured and pulled.
 set remote s3 state to terraform.tfstate
 
 ```
+
+Remote state.
+
+The module generates tf file backend_config.tf.
+
+
 
 The purpose of the root tf state file is to control global AWS global services like IAM.
 

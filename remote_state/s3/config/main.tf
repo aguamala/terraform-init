@@ -71,15 +71,15 @@ resource "aws_iam_policy" "readonly_remote_state_config" {
 #--------------------------------------------------------------
 resource "null_resource" "remote_state_config" {
     provisioner "local-exec" {
-        command = "echo \"${data.template_file.remote_state_config.rendered}\" > ./${var.tf_state_path}remote-state-config.sh"
+        command = "echo \"${data.template_file.remote_state_config.rendered}\" > ./${var.tf_state_path}backend_config.tpl"
     }
-    
+
     depends_on = ["null_resource.terraform_tfvars"]
 }
 
 data "template_file" "remote_state_config" {
 
-    template = "${file("${path.module}/templates/remote_state_config_sh.tpl")}"
+    template = "${file("${path.module}/templates/backend_config.tpl")}"
 
     vars {
         tf_state_bucket = "${var.tf_state_bucket}"

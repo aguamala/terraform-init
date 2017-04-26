@@ -10,6 +10,7 @@ module "remote_state_bucket" {
     source = "github.com/aguamala/terraform-init/remote_state/s3//bucket"
     aws_user_bucket_creator = "${var.aws_terraform_profile}"
     terraform_state_bucket  = "${var.terraform_state_bucket}"
+    terraform_state_bucket_aws_region = "${var.aws_terraform_region}"
 }
 
 module "root_remote_state_config" {
@@ -22,6 +23,6 @@ module "root_remote_state_config" {
     #remote state backend-config
     tf_state_aws_profile = "${var.aws_terraform_profile}"
     tf_state_bucket = "${module.remote_state_bucket.id}"
-    #tf_state_name = "root"
+    tf_state_aws_region = "${var.aws_terraform_region}"
 
 }

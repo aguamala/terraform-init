@@ -52,6 +52,7 @@ resource "aws_iam_user_policy_attachment" "remote_state_bucket" {
 resource "aws_s3_bucket" "remote_state_bucket" {
     bucket = "${var.terraform_state_bucket}"
     acl = "private"
+    region = "${var.terraform_state_bucket_aws_region}"
     versioning {
         enabled = true
     }

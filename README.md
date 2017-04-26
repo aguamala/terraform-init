@@ -41,21 +41,41 @@ var.terraform_state_bucket
   Enter a value: tf-state-files
 ```
 
-Enable remote state. (DEPRECATED)
+Backend configuration.
 
-```
-sh remote-state-config.sh
-Remote state management enabled
-Remote state configured and pulled.
-set remote s3 state to terraform.tfstate
-
-```
-
-Remote state.
-
-The module generates tf file backend_config.tf.
+The module generates tf file backend_config.tf to configure S3 backend to store tf state file.
 
 Terraform will request to perform the init command again to enable the new backend config. When terraform ask if you want to copy your local tf state file to s3 answer "yes".
+
+```
+Backend reinitialization required. Please run "terraform init".
+
+terraform init
+Downloading modules (if any)...
+Get: git::https://github.com/aguamala/terraform-init.git
+Get: git::https://github.com/aguamala/terraform-init.git
+Initializing the backend...
+Do you want to copy state from "local" to "s3"?
+  Pre-existing state was found in "local" while migrating to "s3". No existing
+  state was found in "s3". Do you want to copy the state from "local" to
+  "s3"? Enter "yes" to copy and "no" to start with an empty state.
+
+  Enter a value: yes
+
+Successfully configured the backend "s3"! Terraform will automatically
+use this backend unless the backend configuration changes.
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your environment. If you forget, other
+commands will detect it and remind you to do so if necessary.
+
+```
 
 The purpose of the root tf state file is to control global AWS global services like IAM.
 

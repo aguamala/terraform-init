@@ -70,14 +70,10 @@ terraform apply
 
 ```
 
-Enable remote state for separated tfstate file
+Enable backend config for separated tfstate file
 
 ```
 cd networking/vpc/
-
-sh remote-state-config.sh
-Remote state management enabled
-Remote state configured and pulled.
-set remote s3 state to terraform.tfstate
+terraform init
 
 ```

@@ -5,11 +5,11 @@ variable "tf_state_aws_profile" {
 
 variable "tf_state_aws_region" {
     default = "us-east-1"
-    description = "AWS region"
+    description = "tf state bucket AWS region"
 }
 
 variable "tf_state_bucket" {
-    default = "terraform.state.versioning"
+    default = "terraform-state-versioning"
     description = "S3 bucket name to store terraform state file"
 }
 

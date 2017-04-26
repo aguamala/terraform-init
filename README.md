@@ -55,10 +55,9 @@ Remote state.
 
 The module generates tf file backend_config.tf.
 
-
+Terraform will request to perform the init command again to enable the new backend config. When terraform ask if you want to copy your local tf state file to s3 answer "yes".
 
 The purpose of the root tf state file is to control global AWS global services like IAM.
-
 
 ## Create separated tf state file
 

@@ -24,14 +24,13 @@ resource "aws_iam_group_membership" "identity_iam_readonly" {
     group = "${aws_iam_group.identity_iam_readonlyaccess.name}"
 }
 
-#use with caution
 #resource "aws_iam_group_membership" "identity_iam_fullaccess" {
 #    name = "identity-iam-group-membership"
-#    users = []
+#    users = [
+#        "${var.aws_terraform_profile}",
+#    ]
 #    group = "${aws_iam_group.identity_iam_fullaccess.name}"
 #}
-
-
 
 #--------------------------------------------------------------
 # Storage group membership
@@ -43,12 +42,23 @@ resource "aws_iam_group_membership" "storage_s3_readonly" {
     group = "${aws_iam_group.storage_s3_readonlyaccess.name}"
 }
 
-#use with caution
-#resource "aws_iam_group_membership" "storage_s3_fullaccess" {
-#    name = "storage-s3-group-membership"
-#    users = []
-#    group = "${aws_iam_group.storage_s3_fullaccess.name}"
-#}
+resource "aws_iam_group_membership" "storage_s3_fullaccess" {
+    name = "storage-s3-group-membership"
+    users = []
+    group = "${aws_iam_group.storage_s3_fullaccess.name}"
+}
+
+resource "aws_iam_group_membership" "storage_efs_readonly" {
+    name = "storage-efs-group-membership"
+    users = []
+    group = "${aws_iam_group.storage_efs_readonlyaccess.name}"
+}
+
+resource "aws_iam_group_membership" "storage_efs_fullaccess" {
+    name = "storage-efs-group-membership"
+    users = []
+    group = "${aws_iam_group.storage_efs_fullaccess.name}"
+}
 
 
 #--------------------------------------------------------------
@@ -63,10 +73,11 @@ resource "aws_iam_group_membership" "networking_vpc_readonly" {
 
 resource "aws_iam_group_membership" "networking_vpc_fullaccess" {
     name = "networking-vpc-group-membership"
-    users = []
+    users = [
+        "${var.aws_terraform_profile}",
+    ]
     group = "${aws_iam_group.networking_vpc_fullaccess.name}"
 }
-
 
 resource "aws_iam_group_membership" "networking_route53_readonly" {
     name = "networking-route53-group-membership"
@@ -109,5 +120,18 @@ resource "aws_iam_group_membership" "compute_ec2_readonly" {
 resource "aws_iam_group_membership" "compute_ec2_fullaccess" {
     name = "compute-ec2-group-membership"
     users = []
+
     group = "${aws_iam_group.compute_ec2_fullaccess.name}"
+}
+
+resource "aws_iam_group_membership" "compute_ecs_readonly" {
+    name = "compute-ecs-group-membership"
+    users = []
+    group = "${aws_iam_group.compute_ecs_readonlyaccess.name}"
+}
+
+resource "aws_iam_group_membership" "compute_ecs_fullaccess" {
+    name = "compute-ecs-group-membership"
+    users = []
+    group = "${aws_iam_group.compute_ecs_fullaccess.name}"
 }

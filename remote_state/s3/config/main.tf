@@ -67,7 +67,7 @@ resource "aws_iam_policy" "readonly_remote_state_config" {
 }
 
 #--------------------------------------------------------------
-# S3 remote state script
+# S3 backend config
 #--------------------------------------------------------------
 resource "null_resource" "remote_state_config" {
     provisioner "local-exec" {

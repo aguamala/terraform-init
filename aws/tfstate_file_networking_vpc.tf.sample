@@ -3,7 +3,7 @@
 #--------------------------------------------------------------
 
 module "networking_vpc_remote_state_config" {
-    source = "github.com/aguamala/terraform-init/remote_state/s3//config"
+    source = "github.com/aguamala/terraform-init//remote_state/s3/config"
 
     #remote state backend-config
     tf_state_fullaccess_groups = ["networking.vpc.fullaccess"]

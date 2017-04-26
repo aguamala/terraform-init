@@ -7,14 +7,14 @@ variable "terraform_state_bucket" {
 }
 
 module "remote_state_bucket" {
-    source = "github.com/aguamala/terraform-init/remote_state/s3//bucket"
+    source = "github.com/aguamala/terraform-init//remote_state/s3/bucket"
     aws_user_bucket_creator = "${var.aws_terraform_profile}"
     terraform_state_bucket  = "${var.terraform_state_bucket}"
     terraform_state_bucket_aws_region = "${var.aws_terraform_region}"
 }
 
 module "root_remote_state_config" {
-    source = "github.com/aguamala/terraform-init/remote_state/s3//config"
+    source = "github.com/aguamala/terraform-init//remote_state/s3/config"
 
     #tfstate access
     tf_state_fullaccess_users = ["${var.aws_terraform_profile}"]

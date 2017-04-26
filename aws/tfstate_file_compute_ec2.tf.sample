@@ -3,7 +3,7 @@
 #--------------------------------------------------------------
 
 module "compute_ec2_remote_state_config" {
-    source = "github.com/aguamala/terraform-init/remote_state/s3//config"
+    source = "github.com/aguamala/terraform-init//remote_state/s3/config"
 
     #remote state backend-config
     tf_state_fullaccess_groups = ["compute.ec2.fullaccess"]

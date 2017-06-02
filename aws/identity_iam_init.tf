@@ -43,6 +43,10 @@ resource "null_resource" "identity_iam_directory" {
     provisioner "local-exec" {
         command = "mkdir -p ./identity/iam"
     }
+
+    provisioner "local-exec" {
+        command = "ln -s ../../data_tfstate_files.tf data_tfstate_files.tf"
+    }
 }
 
 #--------------------------------------------------------------

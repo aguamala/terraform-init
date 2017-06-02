@@ -21,16 +21,6 @@ variable "policies" {
   }
 }
 
-data "template_file" "links" {
-  template = "${file("templates/links.tpl")}"
-}
-
-resource "null_resource" "links" {
-    provisioner "local-exec" {
-        command = "echo \"${data.template_file.links.rendered}\" > ./identity/iam/links.tf"
-    }
-}
-
 data "template_file" "iam_group" {
   count    = "${length(var.groups)}"
   template = "${file("templates/iam/groups_init.tpl")}"
@@ -49,9 +39,19 @@ resource "null_resource" "iam_groups" {
     }
 }
 
+data "template_file" "links" {
+  template = "${file("templates/links.tpl")}"
+}
+
+resource "null_resource" "links" {
+    depends_on = ["null_resource.identity_iam_directory"]
+    provisioner "local-exec" {
+        command = "echo \"${data.template_file.links.rendered}\" > ./identity/iam/links.tf"
+    }
+}
+
 resource "null_resource" "identity_iam_directory" {
     depends_on = ["null_resource.terraform_tfvars"]
-
     provisioner "local-exec" {
         command = "mkdir -p ./identity/iam"
     }

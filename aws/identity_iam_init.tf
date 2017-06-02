@@ -1,3 +1,7 @@
+#LIMTIS
+#http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html
+#user 10 groups
+
 #--------------------------------------------------------------
 # identity iam users, groups and policies
 #--------------------------------------------------------------

@@ -13,11 +13,6 @@ variable "tf_state_bucket" {
     description = "S3 bucket name to store terraform state file"
 }
 
-#variable "tf_state_name" {
-#    default = "terraform"
-#    description = "terraform state file key"
-#}
-
 variable "tf_state_path" {
     default = ""
     description = "terraform state file S3 key"

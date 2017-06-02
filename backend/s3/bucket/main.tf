@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "remote_state_bucket" {
 }
 
 resource "aws_iam_policy" "remote_state_bucket" {
-    name = "${var.terraform_state_bucket}_remote_state_s3_bucket"
+    name = "${var.terraform_tfstate_bucket}_remote_state_s3_bucket"
     path = "/terraform/"
     policy = "${data.aws_iam_policy_document.remote_state_bucket.json}"
 }
@@ -50,9 +50,9 @@ resource "aws_iam_user_policy_attachment" "remote_state_bucket" {
 #--------------------------------------------------------------
 
 resource "aws_s3_bucket" "remote_state_bucket" {
-    bucket = "${var.terraform_state_bucket}"
+    bucket = "${var.terraform_tfstate_bucket}"
     acl = "private"
-    region = "${var.terraform_state_bucket_aws_region}"
+    region = "${var.terraform_tfstate_bucket_aws_region}"
     versioning {
         enabled = true
     }

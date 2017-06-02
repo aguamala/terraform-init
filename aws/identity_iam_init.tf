@@ -40,6 +40,8 @@ resource "null_resource" "iam_groups" {
 }
 
 resource "null_resource" "identity_iam_directory" {
+    depends_on = ["null_resource.terraform_tfvars"]
+
     provisioner "local-exec" {
         command = "mkdir -p ./identity/iam"
     }

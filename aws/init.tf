@@ -13,7 +13,7 @@ module "tfstate_bucket" {
     terraform_tfstate_bucket_aws_region = "${var.aws_terraform_region}"
 }
 
-module "remote_state_backend_config" {
+module "init_backend_config" {
     source = "github.com/aguamala/terraform-init//backend/s3/config"
 
     #tfstate access

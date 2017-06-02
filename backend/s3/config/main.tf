@@ -108,36 +108,3 @@ data "template_file" "data_state_file" {
         tf_state_aws_profile = "${var.tf_state_aws_profile}"
     }
 }
-
-#--------------------------------------------------------------
-# Create terraform.tfvars
-#--------------------------------------------------------------
-resource "null_resource" "terraform_tfvars" {
-    provisioner "local-exec" {
-        command = "echo \"${data.template_file.terraform_tfvars.rendered}\" > terraform.tfvars"
-    }
-}
-
-resource "null_resource" "providers_variables" {
-
-    provisioner "local-exec" {
-        command = "if [ ! -f .${var.tf_state_path}variables.tf ]; then cp -p ${path.module}/files/variables.tf variables.tf; fi"
-    }
-
-    provisioner "local-exec" {
-        command = "if [ ! -f .${var.tf_state_path}provider.tf ]; then cp -p ${path.module}/files/provider.tf provider.tf; fi"
-    }
-
-    depends_on = ["null_resource.terraform_tfvars"]
-}
-
-data "template_file" "terraform_tfvars" {
-    template = "${file("${path.module}/templates/terraform_tfvars.tpl")}"
-
-    vars {
-        terraform_tfvars_region   = "${var.tf_state_aws_region}"
-        terraform_tfvars_profile  = "${var.tf_state_aws_profile}"
-        terraform_tfvars_state_bucket = "${var.tf_state_bucket}"
-
-    }
-}

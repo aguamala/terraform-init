@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "remote_state_config" {
 }
 
 resource "aws_iam_policy" "remote_state_config" {
-    name = "${replace(var.tf_state_path, "/", "_")}fullaccess_remote_state_s3_config"
+    name = "${var.tf_state_bucket}_${replace(var.tf_state_path, "/", "_")}fullaccess_remote_state_s3_config"
     path = "/terraform/s3/"
     policy = "${data.aws_iam_policy_document.remote_state_config.json}"
 }
@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "readonly_remote_state_config" {
 }
 
 resource "aws_iam_policy" "readonly_remote_state_config" {
-    name = "${replace(var.tf_state_path, "/", "_")}readonlyaccess_remote_state_s3_config"
+    name = "${var.tf_state_bucket}_${replace(var.tf_state_path, "/", "_")}readonlyaccess_remote_state_s3_config"
     path = "/readonly/terraform/s3/"
     policy = "${data.aws_iam_policy_document.readonly_remote_state_config.json}"
 }

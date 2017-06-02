@@ -2,7 +2,6 @@
 # ${group} user groups
 #--------------------------------------------------------------
 resource "\"aws_iam_group\"" "\"${group}\"" {
-    depends_on = ["\"null_resource.links\""]
     name = "\"${replace("\"${group}\"", "_", ".")}\""
     path = "\"/${replace("\"${group}\"", "_", "/")}/\""
 }

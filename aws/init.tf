@@ -6,6 +6,14 @@ variable "terraform_tfstate_bucket" {
     description = "Terraform state bucket name"
 }
 
+output "module_tfstate_bucket_arn" {
+  value = "${module.tfstate_bucket.arn}"
+}
+
+output "module_tfstate_bucket_id" {
+  value = "${module.tfstate_bucket.id}"
+}
+
 module "tfstate_bucket" {
     source = "github.com/aguamala/terraform-init//backend/s3/bucket"
     aws_user_bucket_creator = "${var.aws_terraform_profile}"

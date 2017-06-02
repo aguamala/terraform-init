@@ -46,7 +46,7 @@ resource "null_resource" "identity_iam_directory" {
     }
 
     provisioner "local-exec" {
-        command = "cd ./identity/iam && ln -s ../../data_tfstate_files.tf data_tfstate_files.tf && ln -s ../../variables.tf variables.tf && ln -s ../../provider.tf provider.tf && ln -s ../../../../terraform.tfvars terraform.tfvars"
+        command = "cd ./identity/iam && ln -s ../../data_tfstate_files.tf data_tfstate_files.tf && ln -s ../../variables.tf variables.tf && ln -s ../../provider.tf provider.tf && ln -s ../../terraform.tfvars terraform.tfvars"
     }
 }
 

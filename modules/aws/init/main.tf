@@ -48,6 +48,6 @@ resource "null_resource" "backend_config" {
     count = "${var.backend == "s3" ? 1 : 0}"
 
     provisioner "local-exec" {
-        command = "echo \"${data.template_file.backend_config.rendered}\" > ./identity/iam/tfstate_backend_config.tf"
+        command = "echo \"${data.template_file.backend_config.rendered}\" > ./identity/iam/backend_config.tf"
     }
 }

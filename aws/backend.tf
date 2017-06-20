@@ -10,7 +10,7 @@ output "module_tfstate_bucket_arn" {
   value = "${module.backend_bucket.arn}"
 }
 
-output "module_tfstate_bucket_id" {
+output "module_backend_config_bucket_id" {
   value = "${module.backend_bucket.id}"
 }
 

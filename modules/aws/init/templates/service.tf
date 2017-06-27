@@ -28,7 +28,7 @@ resource "\"null_resource\"" "\"iam_groups\"" {
     depends_on = ["\"null_resource.${service}_directory\""]
 
     provisioner "\"local-exec\"" {
-        command = "\"echo \\"\"\${data.template_file.iam_group.*.rendered[count.index]}\\" > ./identity/iam/\${var.groups[count.index]}.tf\""
+        command = "\"echo \\"\"\${data.template_file.iam_group.*.rendered[count.index]}\\" > ./${replace(var.service, "_", "/")}/\${var.groups[count.index]}.tf\""
     }
 }
 
@@ -36,25 +36,25 @@ resource "\"null_resource\"" "\"iam_groups\"" {
 resource "\"null_resource\"" "\"\${service}_directory\"" {
     depends_on = ["\"null_resource.terraform_tfvars\""]
     provisioner "\"local-exec\"" {
-        command = "\"mkdir -p ./identity/iam\""
+        command = "\"mkdir -p ./${replace(var.service, "_", "/")}\""
     }
 
     provisioner "\"local-exec\"" {
-        command = "\"cd ./identity/iam && ln -s ../../data_tfstate_files.tf data_tfstate_files.tf && ln -s ../../variables.tf variables.tf && ln -s ../../provider.tf provider.tf && ln -s ../../terraform.tfvars terraform.tfvars\""
+        command = "\"cd ./${replace(var.service, "_", "/")} && ln -s ../../data_tfstate_files.tf data_tfstate_files.tf && ln -s ../../variables.tf variables.tf && ln -s ../../provider.tf provider.tf && ln -s ../../terraform.tfvars terraform.tfvars\""
     }
 }
 
 #--------------------------------------------------------------
-# identity iam backend config
+#  backend config
 #--------------------------------------------------------------
 
 data "\"template_file" "\"${service}_backend_config\"" {
   template = "\"${file("\"templates/backend/s3_config_init.tpl\"")}\""
   vars {
     service = "\"${service}\""
-    path = "\"identity/iam/\""
-    fullaccess_group = "\"identity.iam.fullaccess\""
-    readonlyaccess_group = "\"identiy.iam.readonlyaccess\""
+    path = "\"${replace(var.service, "_", "/")}/\""
+    fullaccess_group = "\"${replace(var.service, "_", ".")}.fullaccess\""
+    readonlyaccess_group = "\"${replace(var.service, "_", ".")}.readonlyaccess\""
   }
 }
 
@@ -62,6 +62,6 @@ resource "\"null_resource" "\"${service}_backend_config\"" {
     depends_on = ["\"null_resource.${service}_directory\""]
 
     provisioner "\"local-exec\"" {
-        command = "\"echo \\\"\${data.template_file.${service}_backend_config.rendered}\\\" > ./identity/iam/tfstate_backend_config.tf\""
+        command = "\"echo \\\"\${data.template_file.${service}_backend_config.rendered}\\\" > ./${replace(var.service, "_", "/")}/tfstate_backend_config.tf\""
     }
 }

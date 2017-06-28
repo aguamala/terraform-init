@@ -10,3 +10,8 @@ module "identity_iam" {
     source = "../modules/aws/init"
     service = "identity_iam"
 }
+
+module "proborsor" {
+    source = "../modules/aws/init"
+    service = "proborsor"
+}

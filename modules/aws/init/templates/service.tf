@@ -40,9 +40,10 @@ resource "\"null_resource\"" "\"\${service}_directory\"" {
     }
 
     provisioner "\"local-exec\"" {
-        command = "\"cd ./${replace(var.service, "_", "/")} && ln -s ../../data_tfstate_files.tf data_tfstate_files.tf && ln -s ../../variables.tf variables.tf && ln -s ../../provider.tf provider.tf && ln -s ../../terraform.tfvars terraform.tfvars\""
+        command = "\"cd ./${replace(var.service, "_", "/")} && ln -s ${replace(replace(var.service, "_", "/"), "/([a-zA-Z]*)/?/", "..")}/data_tfstate_files.tf data_tfstate_files.tf && ln -s ${replace(replace(var.service, "_", "/"), "/([a-zA-Z]*)/?/", "..")}/variables.tf variables.tf && ln -s ${replace(replace(var.service, "_", "/"), "/([a-zA-Z]*)/?/", "..")}/provider.tf provider.tf && ln -s ${replace(replace(var.service, "_", "/"), "/([a-zA-Z]*)/?/", "..")}/terraform.tfvars terraform.tfvars\""
     }
 }
+
 
 #--------------------------------------------------------------
 #  backend config

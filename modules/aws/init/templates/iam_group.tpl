@@ -10,7 +10,6 @@ resource "\"aws_iam_group\"" "\"${group}\"" {
 # ${group} group membership (for users)
 #--------------------------------------------------------------
 resource "\"aws_iam_group_membership\"" "\"${group}\"" {
-    name = "\"${group}_group_membership\""
     name = "\"${replace("\"${group}\"", "_", "")}groupmembership\""
     users = []
     group = "\"\$\{aws_iam_group.${group}.name\}\""

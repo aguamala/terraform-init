@@ -1,7 +1,5 @@
-
-
 variable "service" {
-  type    = "string"
+  type = "string"
 }
 
 variable "backend" {
@@ -9,18 +7,12 @@ variable "backend" {
   default = "s3"
 }
 
-variable "groups" {
-  type = "map"
-  default = {
-    "0" = "identity_iam_fullaccess"
-    "1" = "identiy_iam_readonlyaccess"
-  }
+variable "fullaccess_groups" {
+  type    = "map"
+  default = {}
 }
 
 variable "policies" {
-  type = "map"
-  default = {
-    "0"   = "arn:aws:iam::aws:policy/IAMFullAccess"
-    "1"   = "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
-  }
+  type    = "map"
+  default = {}
 }

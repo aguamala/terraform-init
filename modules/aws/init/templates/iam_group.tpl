@@ -1,27 +1,26 @@
 #--------------------------------------------------------------
-# ${group} user groups
+# ${group_name} user groups
 #--------------------------------------------------------------
-resource "\"aws_iam_group\"" "\"${group}\"" {
-    name = "\"${replace("\"${group}\"", "_", ".")}\""
-    path = "\"/${replace("\"${group}\"", "_", "/")}/\""
+resource "\"aws_iam_group\"" "\"${resource_name}\"" {
+    name = "\"${group_name}\""
 }
 
 #--------------------------------------------------------------
-# ${group} group membership (for users)
+# ${group_name} group membership (for users)
 #--------------------------------------------------------------
-resource "\"aws_iam_group_membership\"" "\"${group}\"" {
-    name = "\"${replace("\"${group}\"", "_", "")}groupmembership\""
+resource "\"aws_iam_group_membership\"" "\"${resource_name}\"" {
+    name = "\"${replace("\"${group_name}\"", ".", "-")}-groupmembership\""
     users = []
-    group = "\"\$\{aws_iam_group.${group}.name\}\""
+    group = "\"\$\{aws_iam_group.${group_name}.name\}\""
 }
 
 #--------------------------------------------------------------
-# ${group} policy attachment (for roles and users)
+# ${group_name} policy attachment (for roles and users)
 #--------------------------------------------------------------
-resource "\"aws_iam_policy_attachment\"" "\"${group}\"" {
-    name = "\"${group}_policy_attachment\""
-    #users = []
+resource "\"aws_iam_policy_attachment\"" "\"${resource_name}\"" {
+    name = "\"${replace("\"${group_name}\"", ".", "-")}-policy-attachment\""
+    users = []
     roles = []
-    groups = ["\"\$\{aws_iam_group.${group}.name\}\""]
+    groups = ["\"\$\{aws_iam_group.${group_name}.name\}\""]
     policy_arn = "\"${policy}\""
 }

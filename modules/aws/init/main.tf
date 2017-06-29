@@ -1,19 +1,38 @@
-data "template_file" "group" {
-  count    = "${length(var.groups)}"
+data "template_file" "fullaccess_group" {
   template = "${file("${path.module}/templates/iam_group.tpl")}"
 
   vars {
-    group  = "${var.groups[count.index]}"
-    policy = "${var.policies[count.index]}"
+    resource_name = "${var.service}_fullaccess"
+    group_name    = "${replace(var.service, "_", ".")}.fullaccess"
+    policy        = "${lookup(var.fullaccess_policies,var.service,"")}"
   }
 }
 
-resource "null_resource" "groups" {
-  count      = "${length(var.groups)}"
+resource "null_resource" "fullaccess_group" {
+  count      = "${var.create_fullaccess_group == "yes" ? 1 : 0}"
   depends_on = ["null_resource.service_directory"]
 
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.group.*.rendered[count.index]}\" > ./${replace(var.service, "_", "/")}/${var.groups[count.index]}.tf"
+    command = "echo \"${data.template_file.fullaccess_group.rendered}\" > ./${replace(var.service, "_", "/")}/${var.service}_fullaccess_group.tf"
+  }
+}
+
+data "template_file" "readonlyaccess_group" {
+  template = "${file("${path.module}/templates/iam_group.tpl")}"
+
+  vars {
+    resource_name = "${var.service}_readonlyaccess"
+    group_name    = "${replace(var.service, "_", ".")}.readonlyaccess"
+    policy        = "${lookup(var.readonlyaccess_policies,var.service,"")}"
+  }
+}
+
+resource "null_resource" "readonlyaccess_group" {
+  count      = "${var.create_readonlyaccess_group == "yes" ? 1 : 0}"
+  depends_on = ["null_resource.service_directory"]
+
+  provisioner "local-exec" {
+    command = "echo \"${data.template_file.readonlyaccess_group.rendered}\" > ./${replace(var.service, "_", "/")}/${var.service}_readonlyaccess.tf"
   }
 }
 
@@ -23,7 +42,7 @@ resource "null_resource" "service_directory" {
   }
 
   provisioner "local-exec" {
-    command = "cd ./${replace(var.service, "_", "/")} && ln -s ${replace(replace(var.service, "_", "/"), "/([a-zA-Z]*)/?/", "..")}/data_tfstate_files.tf data_tfstate_files.tf && ln -s ${replace(replace(var.service, "_", "/"), "/([a-zA-Z]*)/?/", "..")}/variables.tf variables.tf && ln -s ${replace(replace(var.service, "_", "/"), "/([a-zA-Z]*)/?/", "..")}/provider.tf provider.tf && ln -s ${replace(replace(var.service, "_", "/"), "/([a-zA-Z]*)/?/", "..")}/terraform.tfvars terraform.tfvars"
+    command = "cd ./${replace(var.service, "_", "/")} && ln -s ${replace(replace(var.service, "/([a-zA-Z]*)/", ".."), "_" , "/")}/data_tfstate_files.tf data_tfstate_files.tf && ln -s ${replace(replace(var.service, "/([a-zA-Z]*)/", ".."), "_" , "/")}/variables.tf variables.tf && ln -s ${replace(replace(var.service, "/([a-zA-Z]*)/", ".."), "_" , "/")}/provider.tf provider.tf && ln -s ${replace(replace(var.service, "/([a-zA-Z]*)/", ".."), "_" , "/")}/terraform.tfvars terraform.tfvars"
   }
 }
 
@@ -37,6 +56,8 @@ data "template_file" "backend_config" {
   vars {
     service              = "${var.service}"
     path                 = "${replace(var.service, "_", "/")}/"
+    fullaccess_user      = "${var.fullaccess_user}"
+    readonlyaccess_user  = "${var.readonlyaccess_user}"
     fullaccess_group     = "${replace(var.service, "_", ".")}.fullaccess"
     readonlyaccess_group = "${replace(var.service, "_", ".")}.readonlyaccess"
   }

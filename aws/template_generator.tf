@@ -9,22 +9,12 @@
 module "identity_iam" {
   source  = "../modules/aws/init"
   service = "identity_iam"
-
-  groups = {
-    "0" = "identity_iam_fullaccess"
-    "1" = "identiy_iam_readonlyaccess"
-  }
-
-  policies = {
-    "0" = "arn:aws:iam::aws:policy/IAMFullAccess"
-    "1" = "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
-  }
 }
 
 #module "proborsor" {
 #    source    = "../modules/aws/init"
 #    service   = "proborsor"
-#    groups    = { 0 = "identity_iam_fullaccess", 1 = "identiy_iam_readonlyaccess" }
+#    groups    = { 0 = "identity_iam_fullaccess", 1 = "identity_iam_readonlyaccess" }
 #    policies  = { 0 = "arn:aws:iam::aws:policy/IAMFullAccess", 1 = "arn:aws:iam::aws:policy/IAMReadOnlyAccess" }
 #}
 

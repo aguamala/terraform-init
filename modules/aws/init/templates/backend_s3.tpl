@@ -5,13 +5,18 @@
 module "\"${service}_backend_config\"" {
     source = "\"../../../modules/aws/backend/s3/config\""
 
-    #remote state backend-config
-    tf_state_fullaccess_groups = ["\"${replace("\"${service}\"", "_", ".")}.fullaccess\""]
-    tf_state_readonlyaccess_groups = ["\"${replace("\"${service}\"", "_", ".")}.readonlyaccess\""]
+    tfstate_fullaccess_users      = ["\"${fullaccess_user}\""]
+    tfstate_readonlyaccess_users  = ["\"${readonlyaccess_user}\""]
 
-    tf_state_aws_profile = "\"\$\{var.aws_terraform_profile\}\""
-    tf_state_bucket = "\"\$\{data.terraform_remote_state.file.module_backend_config_bucket_id\}\""
-    tf_state_aws_region = "\"\$\{var.aws_terraform_region\}\""
+    tfstate_fullaccess_groups     = ["\"${fullaccess_group}\""]
+    tfstate_readonlyaccess_groups = ["\"${readonlyaccess_group}\""]
 
-    tf_state_path = "\"${path}\""
+    #tfstate_fullaccess_roles      = []
+    #tfstate_readonlyaccess_roles  = []
+
+    tfstate_aws_profile = "\"\$\{var.aws_terraform_profile\}\""
+    tfstate_bucket = "\"\$\{data.terraform_remote_state.file.module_backend_config_bucket_id\}\""
+    tfstate_aws_region = "\"\$\{var.aws_terraform_region\}\""
+
+    tfstate_path = "\"${path}\""
 }

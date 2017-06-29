@@ -7,12 +7,46 @@ variable "backend" {
   default = "s3"
 }
 
-variable "fullaccess_groups" {
-  type    = "map"
-  default = {}
+variable "readonlyaccess_policies" {
+  type = "map"
+
+  default = {
+    "identity_iam"   = "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
+    "compute_ec2"    = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+    "networking_vpc" = "arn:aws:iam::aws:policy/AmazonVPCReadOnlyAccess"
+    "storage_s3"     = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+    "database_rds"   = "arn:aws:iam::aws:policy/AmazonRDSReadOnlyAccess"
+  }
 }
 
-variable "policies" {
-  type    = "map"
-  default = {}
+variable "fullaccess_policies" {
+  type = "map"
+
+  default = {
+    "identity_iam"   = "arn:aws:iam::aws:policy/IAMFullAccess"
+    "compute_ec2"    = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+    "networking_vpc" = "arn:aws:iam::aws:policy/AmazonVPCFullAccess"
+    "storage_s3"     = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+    "database_rds"   = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+  }
+}
+
+variable "create_fullaccess_group" {
+  type    = "string"
+  default = "yes"
+}
+
+variable "create_readonlyaccess_group" {
+  type    = "string"
+  default = "yes"
+}
+
+variable "fullaccess_user" {
+  type    = "string"
+  default = ""
+}
+
+variable "readonlyaccess_user" {
+  type    = "string"
+  default = ""
 }

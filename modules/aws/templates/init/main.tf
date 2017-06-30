@@ -22,7 +22,7 @@ data "template_file" "readonlyaccess_group" {
 # backend config
 #--------------------------------------------------------------
 resource "null_resource" "fullaccess_group" {
-  count    = "${var.environment == "" ? 1 : 0}"
+  count      = "${var.environment == "" ? 1 : 0}"
   depends_on = ["null_resource.service_directory"]
 
   provisioner "local-exec" {
@@ -31,7 +31,7 @@ resource "null_resource" "fullaccess_group" {
 }
 
 resource "null_resource" "readonlyaccess_group" {
-  count    = "${var.environment == "" ? 1 : 0}"
+  count      = "${var.environment == "" ? 1 : 0}"
   depends_on = ["null_resource.service_directory"]
 
   provisioner "local-exec" {
@@ -40,7 +40,8 @@ resource "null_resource" "readonlyaccess_group" {
 }
 
 resource "null_resource" "service_directory" {
-  count    = "${var.environment == "" ? 1 : 0}"
+  count = "${var.environment == "" ? 1 : 0}"
+
   provisioner "local-exec" {
     command = "mkdir -p ./${replace(var.service, "_", "/")}"
   }
@@ -64,8 +65,7 @@ data "template_file" "backend_config" {
 
 resource "null_resource" "backend_config" {
   depends_on = ["null_resource.service_directory"]
-  #count = "${var.backend == "s3" ? 1 : 0}"
-  count    = "${var.environment == "" ? 1 : 0}"
+  count      = "${var.environment == "" ? 1 : 0}"
 
   provisioner "local-exec" {
     command = "echo \"${data.template_file.backend_config.rendered}\" > ./${replace(var.service, "_", "/")}/backend_config.tf"
@@ -76,7 +76,7 @@ resource "null_resource" "backend_config" {
 # backend config environment
 #--------------------------------------------------------------
 resource "null_resource" "fullaccess_group_environment" {
-  count    = "${var.environment != "" ? 1 : 0}"
+  count      = "${var.environment != "" ? 1 : 0}"
   depends_on = ["null_resource.service_directory_environment"]
 
   provisioner "local-exec" {
@@ -85,7 +85,7 @@ resource "null_resource" "fullaccess_group_environment" {
 }
 
 resource "null_resource" "readonlyaccess_group_environment" {
-  count    = "${var.environment != "" ? 1 : 0}"
+  count      = "${var.environment != "" ? 1 : 0}"
   depends_on = ["null_resource.service_directory_environment"]
 
   provisioner "local-exec" {
@@ -94,7 +94,8 @@ resource "null_resource" "readonlyaccess_group_environment" {
 }
 
 resource "null_resource" "service_directory_environment" {
-  count    = "${var.environment != "" ? 1 : 0}"
+  count = "${var.environment != "" ? 1 : 0}"
+
   provisioner "local-exec" {
     command = "mkdir -p ./${var.environment}/${replace(var.service, "_", "/")}"
   }
@@ -119,8 +120,7 @@ data "template_file" "backend_config_environment" {
 
 resource "null_resource" "backend_config_environment" {
   depends_on = ["null_resource.service_directory_environment"]
-  #count = "${var.backend == "s3" ? 1 : 0}"
-  count    = "${var.environment != "" ? 1 : 0}"
+  count      = "${var.environment != "" ? 1 : 0}"
 
   provisioner "local-exec" {
     command = "echo \"${data.template_file.backend_config_environment.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/backend_config.tf"

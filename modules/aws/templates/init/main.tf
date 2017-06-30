@@ -1,4 +1,8 @@
+#--------------------------------------------------------------
+# backend config
+#--------------------------------------------------------------
 data "template_file" "fullaccess_group" {
+  count    = "${var.environment == "" ? 1 : 0}"
   template = "${file("${path.module}/templates/iam_group.tpl")}"
 
   vars {
@@ -9,6 +13,7 @@ data "template_file" "fullaccess_group" {
 }
 
 data "template_file" "readonlyaccess_group" {
+  count    = "${var.environment == "" ? 1 : 0}"
   template = "${file("${path.module}/templates/iam_group.tpl")}"
 
   vars {
@@ -18,9 +23,6 @@ data "template_file" "readonlyaccess_group" {
   }
 }
 
-#--------------------------------------------------------------
-# backend config
-#--------------------------------------------------------------
 resource "null_resource" "fullaccess_group" {
   count      = "${var.environment == "" ? 1 : 0}"
   depends_on = ["null_resource.service_directory"]
@@ -56,10 +58,9 @@ data "template_file" "backend_config" {
   count    = "${var.environment == "" ? 1 : 0}"
 
   vars {
-    service              = "${var.service}"
-    path                 = "${replace(var.service, "_", "/")}/"
-    fullaccess_group     = "${replace(var.service, "_", ".")}.fullaccess"
-    readonlyaccess_group = "${replace(var.service, "_", ".")}.readonlyaccess"
+    service             = "${var.service}"
+    path                = "${replace(var.service, "_", "/")}/"
+    group_resource_name = "${var.environment}_${var.service}"
   }
 }
 
@@ -75,12 +76,34 @@ resource "null_resource" "backend_config" {
 #--------------------------------------------------------------
 # backend config environment
 #--------------------------------------------------------------
+data "template_file" "fullaccess_group_environment" {
+  count    = "${var.environment != "" ? 1 : 0}"
+  template = "${file("${path.module}/templates/iam_group.tpl")}"
+
+  vars {
+    resource_name = "${var.environment}_${var.service}_fullaccess"
+    group_name    = "${var.environment}.${replace(var.service, "_", ".")}.fullaccess"
+    policy        = "${lookup(var.fullaccess_policies,var.service,"")}"
+  }
+}
+
+data "template_file" "readonlyaccess_group_environment" {
+  count    = "${var.environment != "" ? 1 : 0}"
+  template = "${file("${path.module}/templates/iam_group.tpl")}"
+
+  vars {
+    resource_name = "${var.environment}_${var.service}_readonlyaccess"
+    group_name    = "${var.environment}.${replace(var.service, "_", ".")}.readonlyaccess"
+    policy        = "${lookup(var.readonlyaccess_policies,var.service,"")}"
+  }
+}
+
 resource "null_resource" "fullaccess_group_environment" {
   count      = "${var.environment != "" ? 1 : 0}"
   depends_on = ["null_resource.service_directory_environment"]
 
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.fullaccess_group.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/${var.service}_fullaccess_group.tf"
+    command = "echo \"${data.template_file.fullaccess_group_environment.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/${var.service}_fullaccess_group.tf"
   }
 }
 
@@ -89,7 +112,7 @@ resource "null_resource" "readonlyaccess_group_environment" {
   depends_on = ["null_resource.service_directory_environment"]
 
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.readonlyaccess_group.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/${var.service}_readonlyaccess.tf"
+    command = "echo \"${data.template_file.readonlyaccess_group_environment.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/${var.service}_readonlyaccess.tf"
   }
 }
 
@@ -106,15 +129,13 @@ resource "null_resource" "service_directory_environment" {
 }
 
 data "template_file" "backend_config_environment" {
-  template = "${file("${path.module}/templates/backend_s3_environment.tpl")}"
+  template = "${file("${path.module}/templates/backend_s3.tpl")}"
   count    = "${var.environment != "" ? 1 : 0}"
 
   vars {
-    service              = "${var.service}"
-    path                 = "${replace(var.service, "_", "/")}/"
-    environment          = "${var.environment}"
-    fullaccess_group     = "${replace(var.service, "_", ".")}.fullaccess"
-    readonlyaccess_group = "${replace(var.service, "_", ".")}.readonlyaccess"
+    service             = "${var.service}"
+    path                = "${var.environment}/${replace(var.service, "_", "/")}/"
+    group_resource_name = "${var.environment}_${var.service}"
   }
 }
 
@@ -124,5 +145,24 @@ resource "null_resource" "backend_config_environment" {
 
   provisioner "local-exec" {
     command = "echo \"${data.template_file.backend_config_environment.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/backend_config.tf"
+  }
+}
+
+data "template_file" "service_policy_environment" {
+  template = "${file("${path.module}/templates/${var.service}_policy_environment.tpl")}"
+  count    = "${var.environment != "" ? 1 : 0}"
+
+  vars {
+    environment = "${var.environment}"
+  }
+}
+
+resource "null_resource" "service_policy_environment" {
+  depends_on = ["null_resource.service_directory_environment"]
+  count      = "${var.environment != "" ? 1 : 0}"
+
+  #no se si esta politica deba ir en este dir
+  provisioner "local-exec" {
+    command = "echo \"${data.template_file.service_policy_environment.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/${var.service}_iam_policy_environment.tf"
   }
 }

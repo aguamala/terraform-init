@@ -40,13 +40,3 @@ variable "create_readonlyaccess_group" {
   type    = "string"
   default = "yes"
 }
-
-variable "fullaccess_user" {
-  type    = "string"
-  default = ""
-}
-
-variable "readonlyaccess_user" {
-  type    = "string"
-  default = ""
-}

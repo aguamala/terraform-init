@@ -6,21 +6,17 @@
 # user 10 groups
 #--------------------------------------------------------------
 
-module "identity_iam" {
-  source  = "../modules/aws/init"
+module "templates_identity_iam" {
+  source  = "../modules/aws/templates/global"
   service = "identity_iam"
 }
 
-#module "proborsor" {
-#    source    = "../modules/aws/init"
-#    service   = "proborsor"
-#    groups    = { 0 = "identity_iam_fullaccess", 1 = "identity_iam_readonlyaccess" }
-#    policies  = { 0 = "arn:aws:iam::aws:policy/IAMFullAccess", 1 = "arn:aws:iam::aws:policy/IAMReadOnlyAccess" }
-#}
+module "storage_s3" {
+  source  = "../modules/aws/templates/global"
+  service = "storage_s3"
+}
 
-
-#resource "aws_iam_user" "user" {
-#  count = "${length(split(",", var.users))}"
-#  name  = "${element(split(",", var.users), count.index)}"
-#}
-
+module "networking_vpc" {
+  source  = "../modules/aws/templates/environment"
+  service = "networking_vpc"
+}

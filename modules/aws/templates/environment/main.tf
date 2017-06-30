@@ -42,7 +42,7 @@ resource "null_resource" "service_directory" {
   }
 
   provisioner "local-exec" {
-    command = "cd ./${replace(var.service, "_", "/")} && ln -s ${replace(replace(var.service, "/([a-zA-Z]*)/", ".."), "_" , "/")}/data_tfstate_files.tf data_tfstate_files.tf && ln -s ${replace(replace(var.service, "/([a-zA-Z]*)/", ".."), "_" , "/")}/variables.tf variables.tf && ln -s ${replace(replace(var.service, "/([a-zA-Z]*)/", ".."), "_" , "/")}/provider.tf provider.tf && ln -s ${replace(replace(var.service, "/([a-zA-Z]*)/", ".."), "_" , "/")}/terraform.tfvars terraform.tfvars"
+    command = "cd ./${replace(var.service, "_", "/")} && ln -s ${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/data_tfstate_files.tf data_tfstate_files.tf && ln -s ${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/variables.tf variables.tf && ln -s ${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/provider.tf provider.tf && ln -s ${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/terraform.tfvars terraform.tfvars"
   }
 }
 
@@ -56,8 +56,6 @@ data "template_file" "backend_config" {
   vars {
     service              = "${var.service}"
     path                 = "${replace(var.service, "_", "/")}/"
-    fullaccess_user      = "${var.fullaccess_user}"
-    readonlyaccess_user  = "${var.readonlyaccess_user}"
     fullaccess_group     = "${replace(var.service, "_", ".")}.fullaccess"
     readonlyaccess_group = "${replace(var.service, "_", ".")}.readonlyaccess"
   }

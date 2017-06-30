@@ -52,6 +52,7 @@ resource "null_resource" "service_directory" {
 
 data "template_file" "backend_config" {
   template = "${file("${path.module}/templates/backend_s3.tpl")}"
+  count    = "${var.environment == "" ? 1 : 0}"
 
   vars {
     service              = "${var.service}"
@@ -63,10 +64,37 @@ data "template_file" "backend_config" {
 
 resource "null_resource" "backend_config" {
   depends_on = ["null_resource.service_directory"]
-
-  count = "${var.backend == "s3" ? 1 : 0}"
+  #count = "${var.backend == "s3" ? 1 : 0}"
+  count    = "${var.environment == "" ? 1 : 0}"
 
   provisioner "local-exec" {
     command = "echo \"${data.template_file.backend_config.rendered}\" > ./${replace(var.service, "_", "/")}/backend_config.tf"
+  }
+}
+
+#--------------------------------------------------------------
+# backend config environment
+#--------------------------------------------------------------
+
+data "template_file" "backend_config_environment" {
+  template = "${file("${path.module}/templates/backend_s3_environment.tpl")}"
+  count    = "${var.environment != "" ? 1 : 0}"
+
+  vars {
+    service              = "${var.service}"
+    path                 = "${replace(var.service, "_", "/")}/"
+    environment          = "${var.environment}"
+    fullaccess_group     = "${replace(var.service, "_", ".")}.fullaccess"
+    readonlyaccess_group = "${replace(var.service, "_", ".")}.readonlyaccess"
+  }
+}
+
+resource "null_resource" "backend_config_environment" {
+  depends_on = ["null_resource.service_directory"]
+  #count = "${var.backend == "s3" ? 1 : 0}"
+  count    = "${var.environment != "" ? 1 : 0}"
+
+  provisioner "local-exec" {
+    command = "echo \"${data.template_file.backend_config_environment.rendered}\" > ./${replace(var.service, "_", "/")}/backend_config.tf"
   }
 }

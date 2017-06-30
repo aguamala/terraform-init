@@ -35,13 +35,3 @@ variable "fullaccess_policies" {
     "database_rds"   = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
   }
 }
-
-variable "create_fullaccess_group" {
-  type    = "string"
-  default = "yes"
-}
-
-variable "create_readonlyaccess_group" {
-  type    = "string"
-  default = "yes"
-}

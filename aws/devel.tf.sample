@@ -3,8 +3,8 @@
 # given environment.
 # This modules run locally to create a directory structure.
 #--------------------------------------------------------------
-module "networking_vpc" {
-  source      = "../modules/aws/templates/init"
+module "networking_vpc_templates" {
+  source      = "../modules/aws/templates"
   service     = "networking_vpc"
   environment = "devel"
 }

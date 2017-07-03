@@ -111,12 +111,12 @@ resource "aws_iam_policy" "readonly_remote_state_config" {
 #--------------------------------------------------------------
 resource "null_resource" "remote_state_config" {
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.remote_state_config.rendered}\" > backend_config.tf"
+    command = "echo \"${data.template_file.remote_state_config.rendered}\" > backend.tf"
   }
 }
 
 data "template_file" "remote_state_config" {
-  template = "${file("${path.module}/templates/backend_config.tpl")}"
+  template = "${file("${path.module}/templates/backend.tpl")}"
 
   vars {
     tfstate_bucket      = "${var.tfstate_bucket}"

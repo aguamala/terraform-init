@@ -58,9 +58,9 @@ data "template_file" "backend_config" {
   count    = "${var.environment == "" ? 1 : 0}"
 
   vars {
-    service             = "${var.service}"
-    path                = "${replace(var.service, "_", "/")}/"
-    group_resource_name = "${var.environment}_${var.service}"
+    service    = "${var.service}"
+    path       = "${replace(var.service, "_", "/")}/"
+    group_name = "${replace(var.service, "_", ".")}"
   }
 }
 
@@ -69,7 +69,7 @@ resource "null_resource" "backend_config" {
   count      = "${var.environment == "" ? 1 : 0}"
 
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.backend_config.rendered}\" > ./${replace(var.service, "_", "/")}/backend_config.tf"
+    command = "echo \"${data.template_file.backend_config.rendered}\" > ./${replace(var.service, "_", "/")}/mod_backend_config.tf"
   }
 }
 
@@ -133,9 +133,9 @@ data "template_file" "backend_config_environment" {
   count    = "${var.environment != "" ? 1 : 0}"
 
   vars {
-    service             = "${var.service}"
-    path                = "${var.environment}/${replace(var.service, "_", "/")}/"
-    group_resource_name = "${var.environment}_${var.service}"
+    service    = "${var.service}"
+    path       = "${var.environment}/${replace(var.service, "_", "/")}/"
+    group_name = "${var.environment}.${replace(var.service, "_", ".")}"
   }
 }
 
@@ -144,12 +144,12 @@ resource "null_resource" "backend_config_environment" {
   count      = "${var.environment != "" ? 1 : 0}"
 
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.backend_config_environment.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/backend_config.tf"
+    command = "echo \"${data.template_file.backend_config_environment.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/mod_backend_config.tf"
   }
 }
 
 data "template_file" "service_policy_environment" {
-  template = "${file("${path.module}/templates/${var.service}_policy_environment.tpl")}"
+  template = "${file("${path.module}/templates/${replace(var.service, "_", "/")}/iam_policy.tpl")}"
   count    = "${var.environment != "" ? 1 : 0}"
 
   vars {
@@ -161,8 +161,25 @@ resource "null_resource" "service_policy_environment" {
   depends_on = ["null_resource.service_directory_environment"]
   count      = "${var.environment != "" ? 1 : 0}"
 
-  #no se si esta politica deba ir en este dir
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.service_policy_environment.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/${var.service}_iam_policy_environment.tf"
+    command = "echo \"${data.template_file.service_policy_environment.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/${var.service}_iam_policy.tf"
+  }
+}
+
+data "template_file" "main_service_environment" {
+  template = "${file("${path.module}/templates/${replace(var.service, "_", "/")}/main.tpl")}"
+  count    = "${var.environment != "" ? 1 : 0}"
+
+  vars {
+    environment = "${var.environment}"
+  }
+}
+
+resource "null_resource" "main_service_environment" {
+  depends_on = ["null_resource.service_directory_environment"]
+  count      = "${var.environment != "" ? 1 : 0}"
+
+  provisioner "local-exec" {
+    command = "echo \"${data.template_file.main_service_environment.rendered}\" > ./${var.environment}/${replace(var.service, "_", "/")}/main.tf"
   }
 }

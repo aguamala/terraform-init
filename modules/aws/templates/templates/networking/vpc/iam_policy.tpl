@@ -1,7 +1,7 @@
 
 resource "\"aws_iam_policy\"" "\"${environment}_networking_vpc\"" {
   name   = "\"${environment}_networking_vpc\""
-  policy = "\"${data.aws_iam_policy_document.${environment}_networking_vpc.json}\""
+  policy = "\"\$\{data.aws_iam_policy_document.${environment}_networking_vpc.json\}\""
 }
 
 data "\"aws_iam_policy_document\"" "\"${environment}_networking_vpc\"" {
@@ -13,11 +13,11 @@ data "\"aws_iam_policy_document\"" "\"${environment}_networking_vpc\"" {
     ]
 
     condition {
-      test     = "StringEquals"
-      variable = "ec2:Vpc"
+      test     = "\"StringEquals\""
+      variable = "\"ec2:Vpc\""
 
       values = [
-        "arn:aws:ec2:region:account:vpc/vpc-1a2b3c4d",
+        "\"arn:aws:ec2:region:account:vpc/\$\{module.${environment}_vpc.id\}\"",
       ]
     }
 

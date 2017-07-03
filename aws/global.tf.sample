@@ -2,12 +2,12 @@
 # Create initial terraform resources for a AWS service.
 # This modules run locally to create a directory structure.
 #--------------------------------------------------------------
-module "templates_identity_iam" {
-  source  = "../modules/aws/templates/init"
+module "identity_iam_templates" {
+  source  = "../modules/aws/templates"
   service = "identity_iam"
 }
 
-module "storage_s3" {
-  source  = "../modules/aws/templates/init"
-  service = "storage_s3"
-}
+#module "storage_s3_templates" {
+#  source  = "../modules/aws/templates"
+#  service = "storage_s3"
+#}

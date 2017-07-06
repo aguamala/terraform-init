@@ -35,3 +35,25 @@ variable "fullaccess_policies" {
     "database_rds"   = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
   }
 }
+
+variable "administrator_groups" {
+  type = "list"
+  default = ["AdministratorAccess","DatabaseAdministrator","SystemAdministrator","NetworkAdministrator","ServiceCatalogAdminFullAccess","ServiceCatalogAdminReadOnlyAccess","AWSCodeBuildAdminAccess","AmazonAPIGatewayAdministrator","AmazonWorkSpacesAdmin","AmazonWorkSpacesApplicationManagerAdminAccess"]
+}
+
+variable "administrator_group_policies" {
+  type = "map"
+  default = {
+        "AdministratorAccess"                             = "arn:aws:iam::aws:policy/AdministratorAccess"
+        "DatabaseAdministrator"                           = "arn:aws:iam::aws:policy/job-function/DatabaseAdministrator"
+        "SystemAdministrator"                             = "arn:aws:iam::aws:policy/job-function/SystemAdministrator"
+        "NetworkAdministrator"                            = "arn:aws:iam::aws:policy/job-function/NetworkAdministrator"
+        "ServiceCatalogAdminFullAccess"                   = "arn:aws:iam::aws:policy/ServiceCatalogAdminFullAccess"
+        "ServiceCatalogAdminReadOnlyAccess"               = "arn:aws:iam::aws:policy/ServiceCatalogAdminReadOnlyAccess"
+        "AWSCodeBuildAdminAccess"                         = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
+        "AmazonAPIGatewayAdministrator"                   = "arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator"
+        "AmazonWorkSpacesAdmin"                           = "arn:aws:iam::aws:policy/AmazonWorkSpacesAdmin"
+        "AmazonWorkSpacesApplicationManagerAdminAccess"   = "arn:aws:iam::aws:policy/AmazonWorkSpacesApplicationManagerAdminAccess"
+  }
+
+}

@@ -1,3 +1,25 @@
+
+
+data "template_file" "admin_group" {
+  count    = "${var.service == "identity_iam" ? length(var.administrator_groups) : 0}"
+  template = "${file("${path.module}/templates/iam_group.tpl")}"
+
+  vars {
+    resource_name = "${var.service}_${var.administrator_groups[count.index]}"
+    group_name    = "${var.administrator_groups[count.index]}"
+    policy        = "${lookup(var.administrator_group_policies,var.administrator_groups[count.index],"")}"
+  }
+}
+
+resource "null_resource" "admin_group" {
+  count    = "${var.service == "identity_iam" ? length(var.administrator_groups) : 0}"
+  depends_on = ["null_resource.service_directory"]
+
+  provisioner "local-exec" {
+    command = "echo \"${data.template_file.admin_group.*.rendered[count.index]}\" > ./identity/iam/administrator_group_${var.administrator_groups[count.index]}.tf"
+  }
+}
+
 #--------------------------------------------------------------
 # backend config default
 #--------------------------------------------------------------

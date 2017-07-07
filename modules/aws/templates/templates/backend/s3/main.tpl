@@ -8,8 +8,8 @@ module "\"${service}_backend_config\"" {
     #tfstate_fullaccess_users      = []
     #tfstate_readonlyaccess_users  = []
 
-    tfstate_fullaccess_groups = ["\"${group_name_fullaccess}\""]
-    tfstate_readonlyaccess_groups = ["\"${group_name_readonlyaccess}\""]
+    #tfstate_fullaccess_groups = []
+    #tfstate_readonlyaccess_groups = []
 
     #tfstate_fullaccess_roles      = []
     #tfstate_readonlyaccess_roles  = []

@@ -14,6 +14,18 @@ output "module_backend_s3_bucket_id" {
   value = "${module.backend_s3_bucket.id}"
 }
 
+output "module_backend_s3_bucket_readonly_policy_name" {
+  value = "${module.backend_s3_bucket.readonly_policy_name}"
+}
+
+output "module_backend_s3_bucket_readonly_policy_id" {
+  value = "${module.backend_s3_bucket.readonly_policy_id}"
+}
+
+output "module_backend_s3_bucket_readonly_policy_arn" {
+  value = "${module.backend_s3_bucket.readonly_policy_arn}"
+}
+
 module "backend_s3_bucket" {
   source                                 = "../modules/aws/backend/s3/bucket"
   aws_user_bucket_creator                = "${var.aws_terraform_profile}"
@@ -25,8 +37,7 @@ module "backend_config" {
   source = "../modules/aws/backend/s3/config"
 
   #tfstate access
-  tfstate_fullaccess_users     = ["${var.aws_terraform_profile}"]
-  tfstate_readonlyaccess_users = ["${var.aws_terraform_profile}"]
+  tfstate_write_users     = ["${var.aws_terraform_profile}"]
 
   #remote state backend-config
   tfstate_aws_profile = "${var.aws_terraform_profile}"

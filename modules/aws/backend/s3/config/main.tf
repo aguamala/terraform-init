@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "remote_state_config" {
 }
 
 resource "aws_iam_policy" "remote_state_config" {
-  name   = "${var.tfstate_bucket}_${replace(var.tfstate_path, "/", "_")}fullaccess_remote_state_s3_config"
+  name   = "${var.tfstate_bucket}_${replace(var.tfstate_path, "/", "_")}write_remote_state_s3_config"
   policy = "${data.aws_iam_policy_document.remote_state_config.json}"
 }
 

@@ -5,14 +5,11 @@
 module "\"${service}_backend_config\"" {
     source = "\"../../../modules/aws/backend/s3/config\""
 
-    #tfstate_fullaccess_users      = []
-    #tfstate_readonlyaccess_users  = []
+    #tfstate_write_users  = []
 
-    #tfstate_fullaccess_groups = []
-    #tfstate_readonlyaccess_groups = []
+    #tfstate_write_groups = []
 
-    #tfstate_fullaccess_roles      = []
-    #tfstate_readonlyaccess_roles  = []
+    #tfstate_write_roles  = []
 
     tfstate_aws_profile = "\"\$\{var.aws_terraform_profile\}\""
     tfstate_bucket = "\"\$\{data.terraform_remote_state.file.module_backend_s3_bucket_id\}\""

@@ -18,32 +18,17 @@ variable "tfstate_path" {
   description = "terraform state file S3 key"
 }
 
-variable "tfstate_readonlyaccess_users" {
+variable "tfstate_write_users" {
   type    = "list"
   default = []
 }
 
-variable "tfstate_fullaccess_users" {
+variable "tfstate_write_roles" {
   type    = "list"
   default = []
 }
 
-variable "tfstate_readonlyaccess_roles" {
-  type    = "list"
-  default = []
-}
-
-variable "tfstate_fullaccess_roles" {
-  type    = "list"
-  default = []
-}
-
-variable "tfstate_readonlyaccess_groups" {
-  type    = "list"
-  default = []
-}
-
-variable "tfstate_fullaccess_groups" {
+variable "tfstate_write_groups" {
   type    = "list"
   default = []
 }

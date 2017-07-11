@@ -351,7 +351,7 @@ variable "fullaccess_groups_policies_description" {
 
 variable "default_groups" {
   type    = "list"
-  default = ["AdministratorAccess", "DatabaseAdministrator", "SystemAdministrator", "NetworkAdministrator", "ServiceCatalogAdminFullAccess", "ServiceCatalogAdminReadOnlyAccess", "AWSCodeBuildAdminAccess", "AmazonAPIGatewayAdministrator", "AmazonWorkSpacesAdmin", "AmazonWorkSpacesApplicationManagerAdminAccess"]
+  default = ["AdministratorAccess", "DatabaseAdministrator", "SystemAdministrator", "NetworkAdministrator", "AWSCodeBuildAdminAccess", "AmazonAPIGatewayAdministrator", "AmazonWorkSpacesAdmin", "AmazonWorkSpacesApplicationManagerAdminAccess"]
 }
 
 variable "default_groups_policies" {
@@ -363,8 +363,6 @@ variable "default_groups_policies" {
     "AmazonAPIGatewayAdministrator"                 = "arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator"
     "AmazonWorkSpacesAdmin"                         = "arn:aws:iam::aws:policy/AmazonWorkSpacesAdmin"
     "AmazonWorkSpacesApplicationManagerAdminAccess" = "arn:aws:iam::aws:policy/AmazonWorkSpacesApplicationManagerAdminAccess"
-    "ServiceCatalogAdminFullAccess"                 = "arn:aws:iam::aws:policy/ServiceCatalogAdminFullAccess"
-    "ServiceCatalogAdminReadOnlyAccess"             = "arn:aws:iam::aws:policy/ServiceCatalogAdminReadOnlyAccess"
     "DatabaseAdministrator"                         = "arn:aws:iam::aws:policy/job-function/DatabaseAdministrator"
     "SystemAdministrator"                           = "arn:aws:iam::aws:policy/job-function/SystemAdministrator"
     "NetworkAdministrator"                          = "arn:aws:iam::aws:policy/job-function/NetworkAdministrator"
@@ -385,8 +383,6 @@ variable "default_groups_policies_description" {
     "AmazonAPIGatewayAdministrator"                 = "Provides full access to create/edit/delete APIs in Amazon API Gateway via the AWS Management Console."
     "AmazonWorkSpacesAdmin"                         = "Provides access to Amazon WorkSpaces administrative actions via AWS SDK and CLI."
     "AmazonWorkSpacesApplicationManagerAdminAccess" = "Provides administrator access for packaging an application in Amazon WorkSpaces Application Manager."
-    "ServiceCatalogAdminFullAccess"                 = "Provides full access to the service catalog admin console."
-    "ServiceCatalogAdminReadOnlyAccess"             = "Provides read only access to the service catalog admin console."
     "DatabaseAdministrator"                         = "Grants full access permissions to AWS services and actions required to set up and configure AWS database services."
     "SystemAdministrator"                           = "Grants full access permissions necessary for resources required for application and development operations."
     "NetworkAdministrator"                          = "Grants full access permissions to AWS services and actions required to set up and configure AWS network resources."

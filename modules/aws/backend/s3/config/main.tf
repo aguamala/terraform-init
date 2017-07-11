@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "remote_state_config" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.tfstate_bucket}/${var.tfstate_path}",
+      "arn:aws:s3:::${var.tfstate_bucket}",
     ]
 
     condition {
@@ -52,58 +52,6 @@ data "aws_iam_policy_document" "remote_state_config" {
 resource "aws_iam_policy" "remote_state_config" {
   name   = "${var.tfstate_bucket}_${replace(var.tfstate_path, "/", "_")}fullaccess_remote_state_s3_config"
   policy = "${data.aws_iam_policy_document.remote_state_config.json}"
-}
-
-data "aws_iam_policy_document" "readonly_remote_state_config" {
-  statement {
-    sid = "1"
-
-    actions = [
-      "s3:ListAllMyBuckets",
-      "s3:GetBucketLocation",
-    ]
-
-    resources = [
-      "arn:aws:s3:::*",
-    ]
-  }
-
-  statement {
-    actions = [
-      "s3:ListBucket",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${var.tfstate_bucket}/${var.tfstate_path}",
-    ]
-
-    condition {
-      test     = "StringLike"
-      variable = "s3:prefix"
-
-      values = [
-        "",
-        "${var.tfstate_path}*",
-      ]
-    }
-  }
-
-  statement {
-    actions = [
-      "s3:List*",
-      "s3:Get*",
-    ]
-
-    resources = [
-      "arn:aws:s3:::${var.tfstate_bucket}/${var.tfstate_path}",
-      "arn:aws:s3:::${var.tfstate_bucket}/${var.tfstate_path}*",
-    ]
-  }
-}
-
-resource "aws_iam_policy" "readonly_remote_state_config" {
-  name   = "${var.tfstate_bucket}_${replace(var.tfstate_path, "/", "_")}readonlyaccess_remote_state_s3_config"
-  policy = "${data.aws_iam_policy_document.readonly_remote_state_config.json}"
 }
 
 #--------------------------------------------------------------

@@ -5,6 +5,13 @@
 module "identity_iam_templates" {
   source  = "../modules/aws/templates"
   service = "IAM"
+
+  default_groups = ["AdministratorAccess", "DatabaseAdministrator", "SystemAdministrator", "NetworkAdministrator"]
+
+  readonlyaccess_groups = ["AmazonGlacierReadOnlyAccess", "AutoScalingConsoleReadOnlyAccess", "AmazonEC2ContainerRegistryReadOnly","AmazonEC2ReadOnlyAccess", "AmazonVPCReadOnlyAccess", "CloudWatchEventsReadOnlyAccess", "ReadOnlyAccess", "AmazonSESReadOnlyAccess", "AmazonElasticFileSystemReadOnlyAccess", "AmazonRoute53ReadOnlyAccess", "AmazonDynamoDBReadOnlyAccess", "AmazonSNSReadOnlyAccess", "AmazonS3ReadOnlyAccess",
+  "CloudWatchLogsReadOnlyAccess", "AWSCloudTrailReadOnlyAccess","AmazonWorkMailReadOnlyAccess", "ResourceGroupsandTagEditorReadOnlyAccess", "IAMReadOnlyAccess", "AmazonRDSReadOnlyAccess", "CloudWatchReadOnlyAccess", "ServiceCatalogAdminReadOnlyAccess"]
+
+  fullaccess_groups = ["AmazonRDSFullAccess", "AmazonEC2FullAccess", "IAMFullAccess", "AutoScalingFullAccess", "AmazonEC2ContainerRegistryFullAccess", "AmazonS3FullAccess", "CloudWatchFullAccess", "ServiceCatalogAdminFullAccess", "AmazonDynamoDBFullAccess", "AWSCloudTrailFullAccess", "AutoScalingConsoleFullAccess", "AmazonSESFullAccess", "CloudWatchLogsFullAccess", "AmazonEC2ContainerServiceFullAccess", "AmazonVPCFullAccess", "ServiceCatalogEndUserFullAccess", "AmazonElasticFileSystemFullAccess", "ResourceGroupsandTagEditorFullAccess", "AmazonGlacierFullAccess", "AmazonWorkMailFullAccess", "AmazonSNSFullAccess", "AmazonRoute53FullAccess", "CloudWatchEventsFullAccess"]
 }
 
 #module "storage_s3_templates" {

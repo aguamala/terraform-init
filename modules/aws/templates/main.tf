@@ -78,6 +78,7 @@ resource "null_resource" "service_directory" {
   }
 }
 
+
 data "template_file" "backend_config" {
   template = "${file("${path.module}/templates/backend/s3/main.tpl")}"
   count    = "${var.domain == "default" && lookup(var.global_services,var.service, false) ? 1 : 0}"

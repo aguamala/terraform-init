@@ -3,7 +3,7 @@ output "name" {
 }
 
 output "users" {
-  value = ["${aws_iam_group_membership.mod.users}"]
+  value = ["${aws_iam_group_membership.mod.*.users}"]
 }
 
 output "policy" {

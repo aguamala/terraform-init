@@ -76,24 +76,3 @@ rerun this command to reinitialize your environment. If you forget, other
 commands will detect it and remind you to do so if necessary.
 
 ```
-
-The purpose of the root tf state file is to control global AWS global services like IAM.
-
-## Create separated tf state file
-
-```
-mv tfstate_file_networking_vpc.tf.sample tfstate_file_networking_vpc.tf
-
-terraform get
-
-terraform apply
-
-```
-
-Enable backend config for separated tfstate file
-
-```
-cd networking/vpc/
-terraform init
-
-```

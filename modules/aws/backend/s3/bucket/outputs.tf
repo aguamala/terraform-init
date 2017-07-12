@@ -10,10 +10,6 @@ output "readonly_policy_name" {
   value = "${aws_iam_policy.readonly_policy.name}"
 }
 
-output "readonly_policy_id" {
-  value = "${aws_iam_policy.readonly_policy.id}"
-}
-
 output "readonly_policy_arn" {
   value = "${aws_iam_policy.readonly_policy.arn}"
 }

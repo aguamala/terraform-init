@@ -1,71 +1,6 @@
 #--------------------------------------------------------------
-# IAM service
-#--------------------------------------------------------------
-data "template_file" "admin_group" {
-  count    = "${var.service == "IAM" ? length(var.default_groups) : 0}"
-  template = "${file("${path.module}/templates/identity/iam/group.tpl")}"
-
-  vars {
-    resource_name = "${var.service}_administrator_${var.default_groups[count.index]}"
-    group_name    = "${var.default_groups[count.index]}"
-    group_policy  = "${lookup(var.default_groups_policies,var.default_groups[count.index],"")}"
-  }
-}
-
-resource "null_resource" "admin_group" {
-  count      = "${var.service == "IAM" ? length(var.default_groups) : 0}"
-  depends_on = ["null_resource.service_directory"]
-
-  provisioner "local-exec" {
-    command = "echo \"${data.template_file.admin_group.*.rendered[count.index]}\" > ./identity/iam/admin_group_${var.default_groups[count.index]}.tf"
-  }
-}
-
-#--------------------------------------------------------------
 # backend config default
 #--------------------------------------------------------------
-data "template_file" "fullaccess_groups" {
-  count    = "${var.service == "IAM" ? length(var.fullaccess_groups) : 0}"
-  template = "${file("${path.module}/templates/identity/iam/group.tpl")}"
-
-  vars {
-    resource_name     = "${var.fullaccess_groups[count.index]}_fullaccess"
-    group_name        = "${var.fullaccess_groups[count.index]}"
-    group_policy      = "${lookup(var.fullaccess_groups_policies,var.fullaccess_groups[count.index],"")}"
-    group_description = "${lookup(var.fullaccess_groups_policies_description,var.fullaccess_groups[count.index],"")}"
-  }
-}
-
-resource "null_resource" "fullaccess_groups" {
-  count      = "${var.service == "IAM" ? length(var.fullaccess_groups) : 0}"
-  depends_on = ["null_resource.service_directory"]
-
-  provisioner "local-exec" {
-    command = "echo \"${data.template_file.fullaccess_groups.*.rendered[count.index]}\" > ./identity/iam/fullaccess_group_${var.fullaccess_groups[count.index]}.tf"
-  }
-}
-
-data "template_file" "readonlyaccess_groups" {
-  count    = "${var.service == "IAM" ? length(var.readonlyaccess_groups) : 0}"
-  template = "${file("${path.module}/templates/identity/iam/group.tpl")}"
-
-  vars {
-    resource_name     = "${var.readonlyaccess_groups[count.index]}_readonlyaccess"
-    group_name        = "${var.readonlyaccess_groups[count.index]}"
-    group_policy      = "${lookup(var.readonlyaccess_groups_policies,var.readonlyaccess_groups[count.index],"")}"
-    group_description = "${lookup(var.readonlyaccess_groups_policies_description,var.readonlyaccess_groups[count.index],"")}"
-  }
-}
-
-resource "null_resource" "readonlyaccess_groups" {
-  count      = "${var.service == "IAM" ? length(var.readonlyaccess_groups) : 0}"
-  depends_on = ["null_resource.service_directory"]
-
-  provisioner "local-exec" {
-    command = "echo \"${data.template_file.readonlyaccess_groups.*.rendered[count.index]}\" > ./identity/iam/readonly_group_${var.readonlyaccess_groups[count.index]}.tf"
-  }
-}
-
 resource "null_resource" "service_directory" {
   count = "${var.domain == "default" ? 1 : 0}"
 
@@ -77,7 +12,6 @@ resource "null_resource" "service_directory" {
     command = "cd ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")} && ln -s ${replace(replace(lookup(var.service_names,var.service,var.service), "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/data_tfstate_files.tf data_tfstate_files.tf && ln -s ${replace(replace(lookup(var.service_names,var.service,var.service), "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/variables.tf variables.tf && ln -s ${replace(replace(lookup(var.service_names,var.service,var.service), "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/provider.tf provider.tf && ln -s ${replace(replace(lookup(var.service_names,var.service,var.service), "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/terraform.tfvars terraform.tfvars"
   }
 }
-
 
 data "template_file" "backend_config" {
   template = "${file("${path.module}/templates/backend/s3/main.tpl")}"
@@ -147,7 +81,7 @@ resource "null_resource" "service_policy_domain" {
   count      = "${var.domain != "default" ? 1 : 0}"
 
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.service_policy_domain.rendered}\" > ./identity/iam/${var.domain}_${var.service}_policy.tf"
+    command = "echo \"${data.template_file.service_policy_domain.rendered}\" > ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/${var.domain}_${var.service}_policy.tf"
   }
 }
 

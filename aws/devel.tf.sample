@@ -1,0 +1,10 @@
+#--------------------------------------------------------------
+# Create initial terraform resources for a AWS service with a
+# given environment.
+# This modules run locally to create a directory structure.
+#--------------------------------------------------------------
+module "devel_networking_vpc_templates" {
+  source  = "../modules/aws/templates"
+  service = "networking_vpc"
+  domain  = "devel"
+}

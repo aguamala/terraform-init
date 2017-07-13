@@ -13,7 +13,7 @@ module "iam_managed_policies_groups" {
       "AdministratorAccess",
       "DatabaseAdministrator",
       "SystemAdministrator",
-      "NetworkAdministrator"
+      "NetworkAdministrator",
       "AmazonGlacierReadOnlyAccess",
       "AutoScalingConsoleReadOnlyAccess",
       "AmazonEC2ContainerRegistryReadOnly",

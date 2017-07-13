@@ -1,71 +1,106 @@
 #--------------------------------------------------------------
-# create tf files for IAM service admin groups
+# users
 #--------------------------------------------------------------
-data "template_file" "admin_group" {
-  count    = "${var.service == "IAM" ? length(var.default_groups) : 0}"
-  template = "${file("${path.module}/templates/identity/iam/group.tpl")}"
-
-  vars {
-    resource_name     = "${var.service}_administrator_${var.default_groups[count.index]}"
-    group_name        = "${var.default_groups[count.index]}"
-    group_policy      = "${lookup(var.default_groups_policies,var.default_groups[count.index],"")}"
-    group_description = "${lookup(var.default_groups_policies_description,var.default_groups[count.index],"")}"
-  }
+data "template_file" "users" {
+  count    = "${var.service == "IAM" ? 1 : 0}"
+  template = "${file("${path.module}/templates/identity/iam/users.tpl")}"
 }
 
-resource "null_resource" "admin_group" {
-  count      = "${var.service == "IAM" ? length(var.default_groups) : 0}"
+resource "null_resource" "users" {
+  count      = "${var.service == "IAM" ? 1 : 0}"
   depends_on = ["null_resource.service_directory"]
 
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.admin_group.*.rendered[count.index]}\" > ./identity/iam/admin_group_${var.default_groups[count.index]}.tf"
+    command = "if [ ! -f ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/users.tf ]; then echo \"${data.template_file.users.*.rendered[count.index]}\" > ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/users.tf; fi"
   }
 }
 
 #--------------------------------------------------------------
-# create tf files for IAM service fullaccess groups
+# managed policy
 #--------------------------------------------------------------
-data "template_file" "fullaccess_groups" {
-  count    = "${var.service == "IAM" ? length(var.fullaccess_groups) : 0}"
-  template = "${file("${path.module}/templates/identity/iam/group.tpl")}"
+
+data "template_file" "managed_policy" {
+  count    = "${var.service == "IAM" &&  ! var.group && ! var.custom ? length(var.policies) : 0}"
+  template = "${file("${path.module}/templates/identity/iam/managed_policy.tpl")}"
 
   vars {
-    resource_name     = "${var.fullaccess_groups[count.index]}_fullaccess"
-    group_name        = "${var.fullaccess_groups[count.index]}"
-    group_policy      = "${lookup(var.fullaccess_groups_policies,var.fullaccess_groups[count.index],"")}"
-    group_description = "${lookup(var.fullaccess_groups_policies_description,var.fullaccess_groups[count.index],"")}"
+    policy_name        = "${var.policies[count.index]}"
+    policy_arn         = "${lookup(var.managed_policies,var.policies[count.index],"")}"
+    policy_description = "${lookup(var.managed_policies_description,var.policies[count.index],"")}"
   }
 }
 
-resource "null_resource" "fullaccess_groups" {
-  count      = "${var.service == "IAM" ? length(var.fullaccess_groups) : 0}"
+resource "null_resource" "managed_policy" {
+  count      = "${var.service == "IAM" &&  ! var.group && ! var.custom ? length(var.policies) : 0}"
   depends_on = ["null_resource.service_directory"]
 
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.fullaccess_groups.*.rendered[count.index]}\" > ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/fullaccess_group_${var.fullaccess_groups[count.index]}.tf"
+    command = "if [ ! -f ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/policy_attachment_${var.policies[count.index]}.tf ]; then echo \"${data.template_file.managed_policy.*.rendered[count.index]}\" > ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/policy_attachment_${var.policies[count.index]}.tf; fi"
   }
 }
 
 #--------------------------------------------------------------
-# create tf files for IAM service readonlyaccess groups
+# managed policy with group
 #--------------------------------------------------------------
-data "template_file" "readonlyaccess_groups" {
-  count    = "${var.service == "IAM" ? length(var.readonlyaccess_groups) : 0}"
-  template = "${file("${path.module}/templates/identity/iam/group.tpl")}"
+data "template_file" "managed_policy_group" {
+  count    = "${var.service == "IAM" &&  var.group && ! var.custom ? length(var.policies) : 0}"
+  template = "${file("${path.module}/templates/identity/iam/managed_policy_group.tpl")}"
 
   vars {
-    resource_name     = "${var.readonlyaccess_groups[count.index]}_readonlyaccess"
-    group_name        = "${var.readonlyaccess_groups[count.index]}"
-    group_policy      = "${lookup(var.readonlyaccess_groups_policies,var.readonlyaccess_groups[count.index],"")}"
-    group_description = "${lookup(var.readonlyaccess_groups_policies_description,var.readonlyaccess_groups[count.index],"")}"
+    policy_name        = "${var.policies[count.index]}"
+    policy_arn         = "${lookup(var.managed_policies,var.policies[count.index],"")}"
+    policy_description = "${lookup(var.managed_policies_description,var.policies[count.index],"")}"
   }
 }
 
-resource "null_resource" "readonlyaccess_groups" {
-  count      = "${var.service == "IAM" ? length(var.readonlyaccess_groups) : 0}"
+resource "null_resource" "managed_policy_group" {
+  count      = "${var.service == "IAM" &&  var.group && ! var.custom ? length(var.policies) : 0}"
   depends_on = ["null_resource.service_directory"]
 
   provisioner "local-exec" {
-    command = "echo \"${data.template_file.readonlyaccess_groups.*.rendered[count.index]}\" > ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/readonly_group_${var.readonlyaccess_groups[count.index]}.tf"
+    command = "if [ ! -f ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/group_${var.policies[count.index]}.tf ]; then echo \"${data.template_file.managed_policy_group.*.rendered[count.index]}\" > ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/group_${var.policies[count.index]}.tf; fi"
+  }
+}
+
+#--------------------------------------------------------------
+# custom policy
+#--------------------------------------------------------------
+
+data "template_file" "custom_policy" {
+  count    = "${var.service == "IAM" &&  ! var.group && var.custom ? length(var.policies) : 0}"
+  template = "${file("${path.module}/templates/identity/iam/custom_policy.tpl")}"
+
+  vars {
+    policy_name = "${var.policies[count.index]}"
+  }
+}
+
+resource "null_resource" "custom_policy" {
+  count      = "${var.service == "IAM" &&  ! var.group &&  var.custom ? length(var.policies) : 0}"
+  depends_on = ["null_resource.service_directory"]
+
+  provisioner "local-exec" {
+    command = "if [ ! -f ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/policy_${var.policies[count.index]}.tf ]; then echo \"${data.template_file.custom_policy.*.rendered[count.index]}\" > ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/policy_${var.policies[count.index]}.tf; fi"
+  }
+}
+
+#--------------------------------------------------------------
+# custom policy with group
+#--------------------------------------------------------------
+data "template_file" "custom_policy_group" {
+  count    = "${var.service == "IAM" &&  var.group &&  var.custom ? length(var.policies) : 0}"
+  template = "${file("${path.module}/templates/identity/iam/custom_policy_group.tpl")}"
+
+  vars {
+    policy_name = "${var.policies[count.index]}"
+  }
+}
+
+resource "null_resource" "custom_policy_group" {
+  count      = "${var.service == "IAM" &&  var.group &&  var.custom ? length(var.policies) : 0}"
+  depends_on = ["null_resource.service_directory"]
+
+  provisioner "local-exec" {
+    command = "if [ ! -f ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/group_${var.policies[count.index]}.tf ]; then echo \"${data.template_file.custom_policy_group.*.rendered[count.index]}\" > ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/group_${var.policies[count.index]}.tf; fi"
   }
 }

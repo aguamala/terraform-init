@@ -7,9 +7,41 @@ resource "null_resource" "service_directory" {
   provisioner "local-exec" {
     command = "mkdir -p ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}"
   }
+}
+
+resource "null_resource" "data_tfstate_files_link" {
+  depends_on = ["null_resource.service_directory"]
+  count      = "${var.domain == "default" ? 1 : 0}"
 
   provisioner "local-exec" {
-    command = "cd ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")} && ln -s ${replace(replace(lookup(var.service_names,var.service,var.service), "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/data_tfstate_files.tf data_tfstate_files.tf && ln -s ${replace(replace(lookup(var.service_names,var.service,var.service), "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/variables.tf variables.tf && ln -s ${replace(replace(lookup(var.service_names,var.service,var.service), "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/provider.tf provider.tf && ln -s ${replace(replace(lookup(var.service_names,var.service,var.service), "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/terraform.tfvars terraform.tfvars"
+    command = "cd ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")} && if [ ! -L data_tfstate_files.tf ]; then ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/data_tfstate_files.tf data_tfstate_files.tf; fi"
+  }
+}
+
+resource "null_resource" "variables_link" {
+  depends_on = ["null_resource.service_directory"]
+  count      = "${var.domain == "default" ? 1 : 0}"
+
+  provisioner "local-exec" {
+    command = "cd ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")} && if [ ! -L variables.tf ]; then ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/variables.tf variables.tf; fi"
+  }
+}
+
+resource "null_resource" "provider_link" {
+  depends_on = ["null_resource.service_directory"]
+  count      = "${var.domain == "default" ? 1 : 0}"
+
+  provisioner "local-exec" {
+    command = "cd ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")} && if [ ! -L provider.tf ]; then ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/provider.tf provider.tf; fi"
+  }
+}
+
+resource "null_resource" "terraform_tfvars_link" {
+  depends_on = ["null_resource.service_directory"]
+  count      = "${var.domain == "default" ? 1 : 0}"
+
+  provisioner "local-exec" {
+    command = "cd ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")} && if [ ! -L terraform.tfvars ]; then ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/terraform.tfvars terraform.tfvars; fi"
   }
 }
 
@@ -44,7 +76,7 @@ resource "null_resource" "service_directory_domain" {
   }
 
   provisioner "local-exec" {
-    command = "cd ./${var.domain}/${replace(lookup(var.service_names,var.service,var.service), "_", "/")} && ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/data_tfstate_files.tf data_tfstate_files.tf && ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/variables.tf variables.tf && ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/provider.tf provider.tf && ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/terraform.tfvars terraform.tfvars"
+    command = "cd ./${var.domain}/${replace(lookup(var.service_names,var.service,var.service), "_", "/")} && if [ ! -L data_tfstate_files.tf ]; then ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/data_tfstate_files.tf data_tfstate_files.tf && if [ ! -L variables.tf ]; then ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/variables.tf variables.tf && if [ ! -L provider.tf ]; then ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/provider.tf provider.tf && if [ ! -L terraform.tfvars ]; then ln -s ../${replace(replace(var.service, "/([a-zA-Z]*[0-9]?)/", ".."), "_" , "/")}/terraform.tfvars terraform.tfvars"
   }
 }
 

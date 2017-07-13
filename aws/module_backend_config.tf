@@ -1,5 +1,5 @@
 module "backend_config" {
-  source = "../modules/aws/backend/s3/config"
+  source = "github.com/aguamala/terraform-init//modules/aws/backend/s3/config?ref=v0.4"
 
   #tfstate access
   tfstate_write_users = ["${var.aws_terraform_profile}"]

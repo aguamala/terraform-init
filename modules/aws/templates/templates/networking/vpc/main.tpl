@@ -1,5 +1,5 @@
 module "\"${domain}_vpc\"" {
-    source = "\"github.com/aguamala/terraform-init/modules/aws/networking//vpc\""
+    source = "\"github.com/aguamala/terraform-init//modules/aws/networking/vpc?ref=v0.4\""
     name = "\"${domain}\""
     cidr = "\"172.30.0.0\/16\""
     enable_dns_hostnames = true

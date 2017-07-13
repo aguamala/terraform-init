@@ -4,7 +4,7 @@
 # This modules run locally to create a directory structure.
 #--------------------------------------------------------------
 module "devel_networking_vpc_templates" {
-  source  = "../modules/aws/templates"
+  source = "github.com/aguamala/terraform-init//modules/aws/templates?ref=v0.4"
   service = "networking_vpc"
   domain  = "devel"
 }

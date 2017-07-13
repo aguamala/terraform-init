@@ -82,7 +82,7 @@ module "iam_custom_groups" {
 }
 
 #create custom policy attachment
-module "iam_custom_groups" {
+module "iam_custom_policies" {
   source = "github.com/aguamala/terraform-init//modules/aws/templates?ref=v0.4"
   service  = "IAM"
   custom   = true

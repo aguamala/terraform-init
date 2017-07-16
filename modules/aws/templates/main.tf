@@ -53,6 +53,8 @@ data "template_file" "backend_config" {
     service    = "${var.service}"
     path       = "${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/"
     group_name = "${replace(var.service, "_", ".")}"
+    modules_path     = "${var.modules_path}"
+    modules_ref      = "${var.modules_ref}"
   }
 }
 

@@ -1,32 +1,59 @@
-#--------------------------------------------------------------
-# terraform backend S3 bucket
-#--------------------------------------------------------------
-
 variable "terraform_backend_s3_bucket" {
   description = "Terraform state bucket name"
 }
 
-output "module_backend_s3_bucket_arn" {
-  value = "${module.backend_s3_bucket.arn}"
+#--------------------------------------------------------------
+# backend s3 bucket
+#--------------------------------------------------------------
+resource "null_resource" "module_backend_s3_bucket" {
+  provisioner "local-exec" {
+    command = "echo \"${data.template_file.module_backend_s3_bucket.rendered}\" > module_backend_s3_bucket.tf"
+  }
 }
 
-output "module_backend_s3_bucket_id" {
-  value = "${module.backend_s3_bucket.id}"
+data "template_file" "module_backend_s3_bucket" {
+  template = "${file("templates/module_backend_s3_bucket.tpl")}"
+
+  vars {
+    modules_path     = "${var.modules_path}"
+    modules_ref      = "${var.modules_ref}"
+  }
 }
 
-output "module_backend_s3_bucket_readonly_policy_name" {
-  value = "${module.backend_s3_bucket.readonly_policy_name}"
+#--------------------------------------------------------------
+# backend config
+#--------------------------------------------------------------
+resource "null_resource" "module_backend_config" {
+  provisioner "local-exec" {
+    command = "echo \"${data.template_file.module_backend_config.rendered}\" > module_backend_config.tf"
+  }
 }
 
-output "module_backend_s3_bucket_readonly_policy_arn" {
-  value = "${module.backend_s3_bucket.readonly_policy_arn}"
+data "template_file" "module_backend_config" {
+  template = "${file("templates/module_backend_config.tpl")}"
+
+  vars {
+    modules_path     = "${var.modules_path}"
+    modules_ref      = "${var.modules_ref}"
+  }
 }
 
-module "backend_s3_bucket" {
-  source                                 = "github.com/aguamala/terraform-init//modules/aws/backend/s3/bucket?ref=v0.4"
-  aws_user_bucket_creator                = "${var.aws_terraform_profile}"
-  terraform_backend_s3_bucket            = "${var.terraform_backend_s3_bucket}"
-  terraform_backend_s3_bucket_aws_region = "${var.aws_terraform_region}"
+#--------------------------------------------------------------
+# default.tf
+#--------------------------------------------------------------
+resource "null_resource" "default" {
+  provisioner "local-exec" {
+    command = "echo \"${data.template_file.default.rendered}\" > default.tf"
+  }
+}
+
+data "template_file" "default" {
+  template = "${file("templates/default.tpl")}"
+
+  vars {
+    modules_path     = "${var.modules_path}"
+    modules_ref      = "${var.modules_ref}"
+  }
 }
 
 #--------------------------------------------------------------
@@ -44,6 +71,6 @@ data "template_file" "terraform_tfvars" {
   vars {
     terraform_tfvars_region       = "${var.aws_terraform_region}"
     terraform_tfvars_profile      = "${var.aws_terraform_profile}"
-    terraform_tfvars_state_bucket = "${module.backend_s3_bucket.id}"
+    terraform_tfvars_state_bucket = "${var.terraform_backend_s3_bucket}"
   }
 }

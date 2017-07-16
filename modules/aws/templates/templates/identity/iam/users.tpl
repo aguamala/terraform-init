@@ -3,13 +3,13 @@
 #--------------------------------------------------------------
 
 module "\"adminstrators\"" {
-  source      = "\"github.com/aguamala/terraform-init//modules/aws/identity/iam/users?ref=v0.4\""
+  source      = "\"${modules_path}/modules/aws/identity/iam/users${modules_ref}\""
   users       = []
   users_path  = "\"/administrators/\""
 }
 
 #module "\"developers\"" {
-#  source     = "\"github.com/aguamala/terraform-init//modules/aws/identity/iam/users?ref=v0.4\""
+#  source      = "\"${modules_path}/modules/aws/identity/iam/users${modules_ref}\""
 #  users      = []
 #  users_path = "\"/developers/\""
 #}

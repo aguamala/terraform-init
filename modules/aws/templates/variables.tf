@@ -1,3 +1,7 @@
+variable "modules_path" {}
+
+variable "modules_ref" {}
+
 variable "custom" {
   default = false
 }

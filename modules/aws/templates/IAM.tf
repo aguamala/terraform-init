@@ -4,6 +4,10 @@
 data "template_file" "users" {
   count    = "${var.service == "IAM" ? 1 : 0}"
   template = "${file("${path.module}/templates/identity/iam/users.tpl")}"
+  vars {
+    modules_path     = "${var.modules_path}"
+    modules_ref      = "${var.modules_ref}"
+   }
 }
 
 resource "null_resource" "users" {

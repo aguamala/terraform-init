@@ -585,3 +585,7 @@ variable "managed_policies_description" {
     "CloudWatchEventsFullAccess"                              = "Provides full access to Amazon CloudWatch Events."
   }
 }
+
+variable "users" {
+  default = []
+}

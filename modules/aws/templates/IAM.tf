@@ -2,20 +2,22 @@
 # users
 #--------------------------------------------------------------
 data "template_file" "users" {
-  count    = "${var.service == "IAM" ? 1 : 0}"
+  count    = "${var.service == "IAM" ? length(var.users) : 0}"
   template = "${file("${path.module}/templates/identity/iam/users.tpl")}"
+
   vars {
-    modules_path     = "${var.modules_path}"
-    modules_ref      = "${var.modules_ref}"
-   }
+    user         = "${var.users[count.index]}"
+    modules_path = "${var.modules_path}"
+    modules_ref  = "${var.modules_ref}"
+  }
 }
 
 resource "null_resource" "users" {
-  count      = "${var.service == "IAM" ? 1 : 0}"
+  count      = "${var.service == "IAM" ? length(var.users) : 0}"
   depends_on = ["null_resource.service_directory"]
 
   provisioner "local-exec" {
-    command = "if [ ! -f ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/users.tf ]; then echo \"${data.template_file.users.*.rendered[count.index]}\" > ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/users.tf; fi"
+    command = "if [ ! -f ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/user_${var.users[count.index]}.tf ]; then echo \"${data.template_file.users.*.rendered[count.index]}\" > ./${replace(lookup(var.service_names,var.service,var.service), "_", "/")}/user_${var.users[count.index]}.tf; fi"
   }
 }
 

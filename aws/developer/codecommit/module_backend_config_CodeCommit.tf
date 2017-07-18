@@ -2,10 +2,10 @@
 # config  tfstate file backend
 #--------------------------------------------------------------
 
-module "VPC_backend_config" {
-    source = "/home/gabo/github.com/aguamala/terraform-init//modules/aws/backend/s3/config"
+module "CodeCommit_backend_config" {
+    source = "github.com/aguamala/terraform-init//modules/aws/backend/s3/config?ref=v0.7"
 
-    #tfstate_write_users  = []
+    tfstate_write_users  = ["${var.aws_terraform_profile}"]
 
     #tfstate_write_groups = []
 
@@ -15,5 +15,6 @@ module "VPC_backend_config" {
     tfstate_bucket = "${data.terraform_remote_state.file.module_backend_s3_bucket_id}"
     tfstate_aws_region = "${var.aws_terraform_region}"
 
-    tfstate_path = "networking/vpc/"
+    tfstate_path = "developer/codecommit/"
 }
+

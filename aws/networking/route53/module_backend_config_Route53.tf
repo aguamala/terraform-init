@@ -2,7 +2,7 @@
 # config  tfstate file backend
 #--------------------------------------------------------------
 
-module "IAM_backend_config" {
+module "Route53_backend_config" {
     source = "github.com/aguamala/terraform-init//modules/aws/backend/s3/config?ref=v0.7"
 
     tfstate_write_users  = ["${var.aws_terraform_profile}"]
@@ -15,6 +15,6 @@ module "IAM_backend_config" {
     tfstate_bucket = "${data.terraform_remote_state.file.module_backend_s3_bucket_id}"
     tfstate_aws_region = "${var.aws_terraform_region}"
 
-    tfstate_path = "identity/iam/"
+    tfstate_path = "networking/route53/"
 }
 

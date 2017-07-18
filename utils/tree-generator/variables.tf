@@ -1,11 +1,19 @@
+variable "init_path" {
+  default = "../../aws/"
+
+  #default = "./aguamala/"
+}
+
 variable "modules_path" {
-  #default = "github.com/aguamala/terraform-init/"
-  default = "/home/gabo/github.com/aguamala/terraform-init/"
+  default = "github.com/aguamala/terraform-init/"
+
+  #default = "/home/gabo/github.com/aguamala/terraform-init/"
 }
 
 variable "modules_ref" {
-  #default = "?ref=v0.6"
-  default = ""
+  default = "?ref=v0.7"
+
+  #default = ""
 }
 
 variable "domain" {
@@ -13,28 +21,47 @@ variable "domain" {
   default = "default"
 }
 
-variable "service" {
-  type = "string"
+variable "services" {
+  type = "list"
+
+  default = [
+    "IAM",
+    "EC2",
+    "ContainerService",
+    "S3",
+    "EFS",
+    "RDS",
+    "DynamoDB",
+    "VPC",
+    "Route53",
+    "CodeCommit",
+  ]
 }
 
 variable "global_services" {
-  type = "map"
+  type = "list"
 
-  default = {
-    "IAM" = true
-    "S3"  = true
-  }
+  default = [
+    "IAM",
+    "S3",
+    "CodeCommit",
+    "Route53",
+  ]
 }
 
 variable "service_names" {
   type = "map"
 
   default = {
-    "IAM"     = "identity_iam"
-    "EC2"     = "compute_ec2"
-    "S3"      = "storage_s3"
-    "RDS"     = "database_rds"
-    "VPC"     = "networking_vpc"
-    "Route53" = "networking_route53"
+    "IAM"              = "identity_iam"
+    "EC2"              = "compute_ec2"
+    "ContainerService" = "compute_ecs"
+    "S3"               = "storage_s3"
+    "EFS"              = "storage_efs"
+    "RDS"              = "database_rds"
+    "DynamoDB"         = "database_dynamodb"
+    "VPC"              = "networking_vpc"
+    "Route53"          = "networking_route53"
+    "CodeCommit"       = "developer_codecommit"
   }
 }

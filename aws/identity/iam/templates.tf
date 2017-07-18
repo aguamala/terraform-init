@@ -11,7 +11,7 @@ variable "managed_policies_groups_templates" {
     "NetworkAdministrator",
     "Billing",
     "ViewOnlyAccess",
-    "SupportUser"
+    "SupportUser",
   ]
 }
 
@@ -20,7 +20,9 @@ variable "custom_policies_templates" {
 }
 
 variable "custom_policies_groups_templates" {
-  default = []
+  default = [
+    "TerraformBucketReadOnlyAccess",
+  ]
 }
 
 variable "users_templates" {
@@ -62,7 +64,7 @@ data "template_file" "managed_policies" {
 }
 
 resource "null_resource" "managed_policies" {
-  count      = "${length(var.managed_policies_templates)}"
+  count = "${length(var.managed_policies_templates)}"
 
   provisioner "local-exec" {
     command = "if [ ! -f ./policy_attachment_${var.managed_policies_templates[count.index]}.tf ]; then echo \"${data.template_file.managed_policies.*.rendered[count.index]}\" > ./policy_attachment_${var.managed_policies_templates[count.index]}.tf; fi"
@@ -84,7 +86,7 @@ data "template_file" "managed_policies_groups" {
 }
 
 resource "null_resource" "managed_policies_groups" {
-  count    = "${length(var.managed_policies_groups_templates)}"
+  count = "${length(var.managed_policies_groups_templates)}"
 
   provisioner "local-exec" {
     command = "if [ ! -f ./group_${var.managed_policies_groups_templates[count.index]}.tf ]; then echo \"${data.template_file.managed_policies_groups.*.rendered[count.index]}\" > ./group_${var.managed_policies_groups_templates[count.index]}.tf; fi"
@@ -105,7 +107,7 @@ data "template_file" "custom_policies" {
 }
 
 resource "null_resource" "custom_policies" {
-  count      = "${length(var.custom_policies_templates)}"
+  count = "${length(var.custom_policies_templates)}"
 
   provisioner "local-exec" {
     command = "if [ ! -f ./policy_${var.custom_policies_templates[count.index]}.tf ]; then echo \"${data.template_file.custom_policies.*.rendered[count.index]}\" > ./policy_${var.custom_policies_templates[count.index]}.tf; fi"
@@ -125,9 +127,22 @@ data "template_file" "custom_policies_groups" {
 }
 
 resource "null_resource" "custom_policies_groups" {
-  count      = "${length(var.custom_policies_groups_templates)}"
+  count = "${length(var.custom_policies_groups_templates)}"
 
   provisioner "local-exec" {
     command = "if [ ! -f ./group_${var.custom_policies_groups_templates[count.index]}.tf ]; then echo \"${data.template_file.custom_policies_groups.*.rendered[count.index]}\" > ./group_${var.custom_policies_groups_templates[count.index]}.tf; fi"
+  }
+}
+
+#--------------------------------------------------------------
+# custom terraform policy with group
+#--------------------------------------------------------------
+data "template_file" "terraform_policy_group" {
+  template = "${file("templates/terraform_policy_group.tpl")}"
+}
+
+resource "null_resource" "terraform_policy_group" {
+  provisioner "local-exec" {
+    command = "if [ ! -f ./group_TerraformBucketReadOnlyAccess.tf ]; then echo \"${data.template_file.terraform_policy_group.rendered}\" > ./group_TerraformBucketReadOnlyAccess.tf; fi"
   }
 }

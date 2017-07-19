@@ -18,6 +18,6 @@ resource "null_resource" "repositories_templates" {
   }
 
   triggers {
-    repos = "${var.repositories_templates}"
+    repos = "${join(",", var.repositories_templates)}"
   }
 }

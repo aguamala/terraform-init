@@ -1,7 +1,7 @@
 variable "init_path" {
   #default = "../../aws/"
 
-  default = "/tmp/aguamala/"
+  default = "./aguamala/"
 }
 
 variable "modules_path" {

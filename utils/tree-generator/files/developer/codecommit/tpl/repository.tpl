@@ -20,7 +20,7 @@ output "\"${name}_clone_url_http\"" {
 }
 
 output "\"${name}_clone_url_ssh\"" {
-  value = ["\"${aws_codecommit_repository.${name}.clone_url_ssh}\""]
+  value = ["\"\$\{aws_codecommit_repository.${name}.clone_url_ssh\}\""]
 }
 
 #--------------------------------------------------------------------
@@ -53,7 +53,7 @@ data "\"aws_iam_policy_document\"" "\"AWSCodeCommitPowerUser-${name}\"" {
 resource "\"aws_iam_policy\"" "\"AWSCodeCommitPowerUser-${name}\"" {
   name        = "\"AWSCodeCommitPowerUser-${name}\""
   description = "\"\""
-  policy      = "\"${data.aws_iam_policy_document.AWSCodeCommitPowerUser-${name}.json}\""
+  policy      = "\"\$\{data.aws_iam_policy_document.AWSCodeCommitPowerUser-${name}.json\}\""
 }
 
 resource "\"aws_iam_policy_attachment\"" "\"AWSCodeCommitPowerUser-${name}\"" {
@@ -61,5 +61,5 @@ resource "\"aws_iam_policy_attachment\"" "\"AWSCodeCommitPowerUser-${name}\"" {
   users      = []
   roles      = []
   groups     = []
-  policy_arn = "\"${aws_iam_policy.AWSCodeCommitPowerUser-${name}.arn}\""
+  policy_arn = "\"\$\{aws_iam_policy.AWSCodeCommitPowerUser-${name}.arn\}\""
 }

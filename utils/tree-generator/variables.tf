@@ -1,19 +1,19 @@
 variable "init_path" {
-  #default = "../../aws/"
+  default = "../../aws/"
 
-  default = "./aguamala/"
+  #default = "./aguamala/"
 }
 
 variable "modules_path" {
-  #default = "github.com/aguamala/terraform-init/"
+  default = "github.com/aguamala/terraform-init/"
 
-  default = "/home/gabo/github.com/aguamala/terraform-init/"
+  #default = "/home/gabo/github.com/aguamala/terraform-init/"
 }
 
 variable "modules_ref" {
-  #default = "?ref=v0.7"
+  default = "?ref=v0.9"
 
-  default = ""
+  #default = ""
 }
 
 variable "domain" {

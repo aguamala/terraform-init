@@ -1,5 +1,5 @@
 module "\"backend_config\"" {
-  source = "\"${modules_path}/modules/aws/backend/s3/config${modules_ref}\""
+  source = "\"${modules_path}modules/aws/backend/s3//config${modules_ref}\""
 
   #tfstate access
   tfstate_write_users = ["\"\$\{var.aws_terraform_profile\}\""]

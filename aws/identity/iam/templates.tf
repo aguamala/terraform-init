@@ -1,34 +1,3 @@
-variable "managed_policies_templates" {
-  default = []
-}
-
-variable "managed_policies_groups_templates" {
-  default = [
-    "ReadOnlyAccess",
-    "AdministratorAccess",
-    "DatabaseAdministrator",
-    "SystemAdministrator",
-    "NetworkAdministrator",
-    "Billing",
-    "ViewOnlyAccess",
-    "SupportUser",
-  ]
-}
-
-variable "custom_policies_templates" {
-  default = []
-}
-
-variable "custom_policies_groups_templates" {
-  default = [
-    "TerraformBucketReadOnlyAccess",
-  ]
-}
-
-variable "users_templates" {
-  default = []
-}
-
 #--------------------------------------------------------------
 # users
 #--------------------------------------------------------------
@@ -47,6 +16,11 @@ resource "null_resource" "users" {
   provisioner "local-exec" {
     command = "if [ ! -f ./user_${var.users_templates[count.index]}.tf ]; then echo \"${data.template_file.users.*.rendered[count.index]}\" > ./user_${var.users_templates[count.index]}.tf; fi"
   }
+
+  triggers {
+    users = "${join(",", var.users_templates)}"
+  }
+
 }
 
 #--------------------------------------------------------------
@@ -68,6 +42,10 @@ resource "null_resource" "managed_policies" {
 
   provisioner "local-exec" {
     command = "if [ ! -f ./policy_attachment_${var.managed_policies_templates[count.index]}.tf ]; then echo \"${data.template_file.managed_policies.*.rendered[count.index]}\" > ./policy_attachment_${var.managed_policies_templates[count.index]}.tf; fi"
+  }
+
+  triggers {
+    mpt = "${join(",", var.managed_policies_templates)}"
   }
 }
 
@@ -91,6 +69,10 @@ resource "null_resource" "managed_policies_groups" {
   provisioner "local-exec" {
     command = "if [ ! -f ./group_${var.managed_policies_groups_templates[count.index]}.tf ]; then echo \"${data.template_file.managed_policies_groups.*.rendered[count.index]}\" > ./group_${var.managed_policies_groups_templates[count.index]}.tf; fi"
   }
+
+  triggers {
+    mpgt = "${join(",", var.managed_policies_groups_templates)}"
+  }
 }
 
 #--------------------------------------------------------------
@@ -112,6 +94,10 @@ resource "null_resource" "custom_policies" {
   provisioner "local-exec" {
     command = "if [ ! -f ./policy_${var.custom_policies_templates[count.index]}.tf ]; then echo \"${data.template_file.custom_policies.*.rendered[count.index]}\" > ./policy_${var.custom_policies_templates[count.index]}.tf; fi"
   }
+
+  triggers {
+    cpt = "${join(",", var.custom_policies_templates)}"
+  }
 }
 
 #--------------------------------------------------------------
@@ -131,6 +117,10 @@ resource "null_resource" "custom_policies_groups" {
 
   provisioner "local-exec" {
     command = "if [ ! -f ./group_${var.custom_policies_groups_templates[count.index]}.tf ]; then echo \"${data.template_file.custom_policies_groups.*.rendered[count.index]}\" > ./group_${var.custom_policies_groups_templates[count.index]}.tf; fi"
+  }
+
+  triggers {
+    cpgt = "${join(",", var.custom_policies_groups_templates)}"
   }
 }
 

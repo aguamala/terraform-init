@@ -1,14 +1,32 @@
-variable "custom" {
-  default = false
+variable "managed_policies_templates" {
+  default = []
 }
 
-variable "group" {
-  default = false
+variable "managed_policies_groups_templates" {
+  default = [
+    "ReadOnlyAccess",
+    "AdministratorAccess",
+    "DatabaseAdministrator",
+    "SystemAdministrator",
+    "NetworkAdministrator",
+    "Billing",
+    "ViewOnlyAccess",
+    "SupportUser",
+  ]
 }
 
-variable "domain" {
-  type    = "string"
-  default = "default"
+variable "custom_policies_templates" {
+  default = []
+}
+
+variable "custom_policies_groups_templates" {
+  default = [
+    "TerraformBucketReadOnlyAccess",
+  ]
+}
+
+variable "users_templates" {
+  default = []
 }
 
 variable "managed_policies" {

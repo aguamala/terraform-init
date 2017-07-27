@@ -1,1 +1,1 @@
-../..../data_tfstate_files.tf
+../../data_tfstate_files.tf

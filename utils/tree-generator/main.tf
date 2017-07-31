@@ -4,7 +4,7 @@ resource "null_resource" "root_directory" {
   }
 
   provisioner "local-exec" {
-    command = "touch ${var.init_path}/data_tfstate_files.tf && cp -p files/provider.tf ${var.init_path}/ && cp -p files/templates.tf ${var.init_path}/ && cp -p files/variables.tf ${var.init_path}/"
+    command = "touch ${var.init_path}/data_tfstate_files.tf && touch ${var.init_path}/terraform.tfvars && cp -p files/provider.tf ${var.init_path}/ && cp -p files/templates.tf ${var.init_path}/ && cp -p files/variables.tf ${var.init_path}/"
   }
 
   provisioner "local-exec" {

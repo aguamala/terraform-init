@@ -1,5 +1,5 @@
 module "vpc" {
-  source               = "github.com/aguamala/terraform-init/modules/aws/networking//vpc?ref=v0.9"
+  source               = "github.com/aguamala/terraform-init/modules/aws/networking//vpc?ref=v0.11"
   name                 = "${var.name}"
   cidr                 = "${var.cidr}"
   enable_dns_hostnames = "${var.enable_dns_hostnames}"

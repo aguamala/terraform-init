@@ -11,7 +11,7 @@ variable "modules_path" {
 }
 
 variable "modules_ref" {
-  default = "?ref=v0.9"
+  default = "?ref=v0.11"
 
   #default = ""
 }

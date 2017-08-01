@@ -1,6 +1,5 @@
 variable "init_path" {
-  default = "../../aws/"
-
+  #default = "../../aws/"
   #default = "./aguamala/"
 }
 

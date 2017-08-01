@@ -3,7 +3,7 @@
 #--------------------------------------------------------------
 
 module "Route53_backend_config" {
-    source = "github.com/aguamala/terraform-init/modules/aws/backend/s3//config?ref=v0.11"
+    source = "github.com/aguamala/terraform-init//modules/aws/backend/s3/config?ref=v0.11"
 
     tfstate_write_users  = ["${var.aws_terraform_profile}"]
 

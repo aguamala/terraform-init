@@ -5,7 +5,7 @@
 
 #create group with a AWS managed policy attachment
 module "\"iam_managed_policies_groups\"" {
-  source        = "\"${modules_path}modules/aws//templates${modules_ref}\""
+  source        = "\"${modules_path}/modules/aws/templates${modules_ref}\""
   modules_path  = "\"\$\{var.modules_path\}\""
   modules_ref   = "\"\$\{var.modules_ref\}\""
   service       = "\"IAM\""

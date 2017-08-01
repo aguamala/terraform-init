@@ -1,5 +1,5 @@
 module "\"vpc\"" {
-  source               = "\"${modules_path}modules/aws/networking//vpc${modules_ref}\""
+  source               = "\"${modules_path}/modules/aws/networking/vpc${modules_ref}\""
   name                 = "\"\$\{var.name\}\""
   cidr                 = "\"\$\{var.cidr\}\""
   enable_dns_hostnames = "\"\$\{var.enable_dns_hostnames\}\""

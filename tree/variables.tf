@@ -1,11 +1,7 @@
-variable "init_path" {
-  #default = "../../aws/"
-  #default = "./aguamala/"
-}
+variable "init_path" {}
 
 variable "modules_path" {
   default = "github.com/aguamala/terraform-init/"
-
   #default = "/home/gabo/github.com/aguamala/terraform-init/"
 }
 

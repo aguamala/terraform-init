@@ -4,7 +4,7 @@ resource "null_resource" "root_directory" {
   }
 
   provisioner "local-exec" {
-    command = "touch ${var.init_path}/data_tfstate_files.tf && touch ${var.init_path}/terraform.tfvars && cp -p files/provider.tf ${var.init_path}/ && cp -p files/templates.tf ${var.init_path}/ && cp -p files/variables.tf ${var.init_path}/"
+    command = "touch ${var.init_path}/global_data_tfstate_files.tf && touch ${var.init_path}/workspace_data_tfstate_files.tf && touch ${var.init_path}/terraform.tfvars && cp -p files/provider.tf ${var.init_path}/ && cp -p files/templates.tf ${var.init_path}/ && cp -p files/variables.tf ${var.init_path}/"
   }
 
   provisioner "local-exec" {
@@ -93,7 +93,7 @@ resource "null_resource" "service_links" {
   count      = "${length(var.services)}"
 
   provisioner "local-exec" {
-    command = "cd ${var.init_path}${replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "_", "/")} && if [ ! -L data_tfstate_files.tf ]; then ln -s ${replace(replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "/([a-zA-Z]*[0-9]*)/", ".."), "_" , "/")}/data_tfstate_files.tf data_tfstate_files.tf; fi"
+    command = "cd ${var.init_path}${replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "_", "/")} && if [ ! -L global_data_tfstate_files.tf ]; then ln -s ${replace(replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "/([a-zA-Z]*[0-9]*)/", ".."), "_" , "/")}/global_data_tfstate_files.tf global_data_tfstate_files.tf; fi"
   }
 
   provisioner "local-exec" {

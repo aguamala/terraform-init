@@ -4,16 +4,16 @@ resource "null_resource" "root_directory" {
   }
 
   provisioner "local-exec" {
-    command = "touch ${var.init_path}/global_data_tfstate_files.tf && touch ${var.init_path}/workspace_data_tfstate_files.tf && touch ${var.init_path}/terraform.tfvars && cp -p files/provider.tf ${var.init_path}/ && cp -p files/templates.tf ${var.init_path}/ && cp -p files/variables.tf ${var.init_path}/"
+    command = "touch ${var.init_path}/global_data_tfstate_files.tf && touch ${var.init_path}/workspace_data_tfstate_files.tf && touch ${var.init_path}/terraform.tfvars && cp -p ${path.module}/files/provider.tf ${var.init_path}/ && cp -p ${path.module}/files/templates.tf ${var.init_path}/ && cp -p ${path.module}/files/variables.tf ${var.init_path}/"
   }
 
   provisioner "local-exec" {
-    command = "mkdir -p  ${var.init_path}/templates && cp -p files/*.tpl ${var.init_path}/templates/"
+    command = "mkdir -p  ${var.init_path}/templates && cp -p ${path.module}/files/*.tpl ${var.init_path}/templates/"
   }
 }
 
 data "template_file" "root_backend_config" {
-  template = "${file("templates/root_backend_s3_config.tpl")}"
+  template = "${file("${path.module}/templates/root_backend_s3_config.tpl")}"
 
   vars {
     modules_path = "${var.modules_path}"
@@ -30,7 +30,7 @@ resource "null_resource" "root_backend_config" {
 }
 
 data "template_file" "backend_s3_bucket" {
-  template = "${file("templates/backend_s3_bucket.tpl")}"
+  template = "${file("${path.module}/templates/backend_s3_bucket.tpl")}"
 
   vars {
     modules_path = "${var.modules_path}"
@@ -59,16 +59,16 @@ resource "null_resource" "service_directory" {
   }
 
   provisioner "local-exec" {
-    command = "cp -rap files/${replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "_", "/")}/tpl/*  ${var.init_path}${replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "_", "/")}/templates/"
+    command = "cp -rap ${path.module}/files/${replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "_", "/")}/tpl/*  ${var.init_path}${replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "_", "/")}/templates/"
   }
 
   provisioner "local-exec" {
-    command = "cp -rap files/${replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "_", "/")}/tf/*  ${var.init_path}${replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "_", "/")}/"
+    command = "cp -rap ${path.module}/files/${replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "_", "/")}/tf/*  ${var.init_path}${replace(lookup(var.service_names,var.services[count.index],var.services[count.index]), "_", "/")}/"
   }
 }
 
 data "template_file" "service_backend_config" {
-  template = "${file("templates/backend_s3_config.tpl")}"
+  template = "${file("${path.module}/templates/backend_s3_config.tpl")}"
   count    = "${length(var.global_services)}"
 
   vars {
@@ -110,7 +110,7 @@ resource "null_resource" "service_links" {
 }
 
 data "template_file" "networking_vpc_module" {
-  template = "${file("templates/networking_vpc.tpl")}"
+  template = "${file("${path.module}/templates/networking_vpc.tpl")}"
 
   vars {
     modules_path = "${var.modules_path}"

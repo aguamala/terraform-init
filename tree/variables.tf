@@ -1,4 +1,6 @@
-variable "init_path" {}
+variable "init_path" {
+   default = "./aguamala/"
+}
 
 variable "modules_path" {
   default = "github.com/aguamala/terraform-init/"
